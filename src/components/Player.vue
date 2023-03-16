@@ -10,6 +10,7 @@
 <script>
 // import { defineComponent } from "vue";
 import YouTube from "vue3-youtube";
+import socket from "../socket";
 
 export default {
   components: { YouTube },
@@ -22,6 +23,9 @@ export default {
     currentClipLink() {
       return this.$store.getters.currentClipLink;
     },
+  },
+  mounted() {
+    socket.connect();
   },
   methods: {
     onReady() {
