@@ -1,16 +1,44 @@
 const express = require("express");
-const http = require("http");
-const socketIO = require("socket.io");
-
+const io = require("./socket");
+// const session = require("express-session");
+// const passport = require("passport");
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
 
-io.on("connection", (socket) => {
-  console.log("A user connected");
-});
+// const sessionMiddleware = session({
+//   secret: "changeit",
+//   resave: false,
+//   saveUninitialized: false,
+// });
+// app.use(sessionMiddleware);
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+// const DUMMY_USER = {
+//   id: 1,
+//   username: "user",
+//   password: "pass",
+// };
+
+// passport.use(
+//   new LocalStrategy((username, password, done) => {
+//     if (username === "user" && password === "pass") {
+//       console.log("authentication OK");
+//       return done(null, DUMMY_USER);
+//     } else {
+//       console.log("wrong credentials");
+//       return done(null, false);
+//     }
+//   })
+// );
 
 const port = 5000;
-server.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server started on port ${port}`);
+});
+
+io.attach(server);
+
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  server.close(() => process.exit(1));
 });
