@@ -1,22 +1,10 @@
 <template>
-  <router-view /> -->
+  <router-view />
   <!-- <iframe width="420" height="345" v-bind:src="currentClipLink"> </iframe> -->
-  <Player></Player>
-  <div class="right">
-    <Playlist></Playlist>
-  </div>
 </template>
 <script>
-import Playlist from "./components/Playlist.vue";
-import Player from "./components/Player.vue";
-
 export default {
-  components: { Player, Playlist },
-  computed: {
-    currentClipLink() {
-      return this.$store.getters.currentClipLink;
-    },
-  },
+  computed: {},
 };
 </script>
 <style lang="scss">

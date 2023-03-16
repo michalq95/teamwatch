@@ -5,6 +5,7 @@
     @stateChange="onStateChange"
     ref="youtube"
   />
+  Shared: <input type="checkbox" v-model="shared" /> Volume:
   <input type="range" min="1" max="100" v-model="hostVolume" />
 </template>
 <script>
@@ -17,15 +18,23 @@ export default {
   data() {
     return {
       hostVolume: 50,
+      shared: false,
     };
   },
   computed: {
     currentClipLink() {
       return this.$store.getters.currentClipLink;
     },
+    roomid() {
+      return this.$route.params.roomid;
+    },
   },
-  mounted() {
+  async created() {
+    socket.auth = { room: this.roomid };
     socket.connect();
+    socket.on("newuserconnected", ({ username }) => {
+      console.log(`user ${username} connected to room ${this.roomid}`);
+    });
   },
   methods: {
     onReady() {
