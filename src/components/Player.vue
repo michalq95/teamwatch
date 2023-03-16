@@ -35,30 +35,43 @@ export default {
     socket.on("newuserconnected", ({ username }) => {
       console.log(`user ${username} connected to room ${this.roomid}`);
     });
+    socket.on("track:play", () => {
+      this.$refs.youtube.playVideo();
+    });
+    socket.on("track:pause", () => {
+      this.$refs.youtube.pauseVideo();
+    });
   },
   methods: {
     onReady() {
       this.$refs.youtube.playVideo();
     },
-    onStateChange(value) {
+    async onStateChange(value) {
       switch (value.data) {
         case 0: //song ended
-          this.$store.commit("incrementCurrentIndex");
+          await this.$store.commit("incrementCurrentIndex");
+          socket.emit("track:switch", {
+            playlistData: this.$store.getters.playlistData,
+            to: this.roomid,
+          });
           break;
         case 1: //song playing
-          console.log("emit play");
+          socket.emit("track:play", { to: this.roomid });
           break;
         case 2: //song paused
-          console.log("emit pause");
+          socket.emit("track:pause", { to: this.roomid });
           break;
         case 3: //song buffering
-          if (this.$store.getters.isHost) console.log("emit pause?");
+          if (this.$store.getters.isHost) {
+            socket.emit("track:pause", { to: this.roomid });
+          }
           break;
-        case 5: //song buffering
+        case 5: //song seek
           console.log("emit current position");
+          //dupa nie dziala, to nie to
+          // socket.emit("track:cue", { to: this.roomid });
           break;
       }
-      console.log("state changed " + value.data);
     },
   },
 };
