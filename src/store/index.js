@@ -6,8 +6,8 @@ export default createStore({
     host: true,
     playlist: [
       { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
-      { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
-      { name: "Immortal", link: "https://www.youtube.com/watch?v=ofyxXczVWKk" },
+      // { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
+      // { name: "Immortal", link: "https://www.youtube.com/watch?v=ofyxXczVWKk" },
     ],
     currentIndex: 0,
     currentTime: 0,
@@ -32,6 +32,12 @@ export default createStore({
   mutations: {
     incrementCurrentIndex(state) {
       state.currentIndex++;
+    },
+    setStatePlaylist(state, playlist) {
+      state.playlist = playlist;
+    },
+    setIndex(state, index) {
+      state.currentIndex = index;
     },
   },
   actions: {},

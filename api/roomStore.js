@@ -6,6 +6,7 @@ function getRoomByName(name) {
 
 function createOrJoinRoom(name) {
   let room = getRoomByName(name);
+  console.log(name);
   if (!room) {
     room = {
       name: name,
@@ -20,8 +21,9 @@ function createOrJoinRoom(name) {
       currentIndex: 0,
     };
     rooms.push(room);
-    return room;
-  } else return room;
+  }
+  console.log(room);
+  return room;
 }
 
 function addVideo({ roomName, videoLink }) {

@@ -1,12 +1,14 @@
 <template>
-  <YouTube
-    v-bind:src="currentClipLink"
-    @ready="onReady"
-    @stateChange="onStateChange"
-    ref="youtube"
-  />
-  Shared: <input type="checkbox" v-model="shared" /> Volume:
-  <input type="range" min="1" max="100" v-model="hostVolume" />
+  <div v-if="currentClipLink">
+    <YouTube
+      v-bind:src="currentClipLink"
+      @ready="onReady"
+      @stateChange="onStateChange"
+      ref="youtube"
+    />
+    Shared: <input type="checkbox" v-model="shared" /> Volume:
+    <input type="range" min="1" max="100" v-model="hostVolume" />
+  </div>
 </template>
 <script>
 // import { defineComponent } from "vue";
@@ -40,6 +42,14 @@ export default {
     });
     socket.on("track:pause", () => {
       this.$refs.youtube.pauseVideo();
+    });
+    socket.on("room", (data) => {
+      this.$store.commit("setStatePlaylist", data.playlist);
+      this.$store.commit("setIndex", data.currentIndex);
+    });
+    socket.on("track:switch", (data) => {
+      this.$store.commit("setStatePlaylist", data.playlist);
+      this.$store.commit("setIndex", data.currentIndex);
     });
   },
   methods: {

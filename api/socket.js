@@ -11,7 +11,7 @@ io.use(async (socket, next) => {
 io.on("connection", async (socket) => {
   console.log(`A user connected to room ${socket.room}`);
   socket.join(socket.room);
-  socket.emit("room", createOrJoinRoom());
+  socket.emit("room", createOrJoinRoom(socket.room));
   socket.to(socket.room).emit("newuserconnected", {
     username: socket.username,
   });
@@ -24,7 +24,12 @@ io.on("connection", async (socket) => {
     socket.to(data.to).emit("track:pause");
   });
 
-  socket.on("track:switch", (data) => {});
+  socket.on("track:switch", ({ playlistData, to }) => {
+    let room = getRoomByName(to);
+    room.currentIndex = playlistData.currentIndex;
+
+    socket.to(to).emit("track:switch", room);
+  });
 });
 
 module.exports = io;
