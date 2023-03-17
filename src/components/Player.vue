@@ -61,9 +61,9 @@ export default {
               console.log("playing video once more, wy it has to be like this");
               this.$refs.youtube.playVideo();
             }
-          }, 2000);
+          }, 1000);
         }
-      }, 2000);
+      }, 1000);
     });
   },
   methods: {

@@ -30,6 +30,18 @@ io.on("connection", async (socket) => {
 
     socket.to(to).emit("track:switch", room);
   });
+
+  socket.on("track:add", ({ video, videoName, to }) => {
+    console.log(video);
+    let videoLink = video;
+    let room = getRoomByName(to);
+    //should verify if valid youtube video
+    //and name should be also taken from API
+    if (videoLink.length == 11)
+      videoLink = `https://www.youtube.com/watch?v=${videoLink}`;
+    room.playlist.push({ name: videoName, link: videoLink });
+    io.in(to).emit("room", room);
+  });
 });
 
 module.exports = io;

@@ -6,23 +6,21 @@ function getRoomByName(name) {
 
 function createOrJoinRoom(name) {
   let room = getRoomByName(name);
-  console.log(name);
   if (!room) {
     room = {
       name: name,
       playlist: [
         { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
-        { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
+        { name: "Barbie", link: "https://www.youtube.com/watch?v=qundeyQtsQU" },
         {
-          name: "Immo",
-          link: "https://www.youtube.com/watch?v=ofyxXczVWKk",
+          name: "Suce",
+          link: "https://www.youtube.com/watch?v=NF5Co7GXvCY",
         },
       ],
       currentIndex: 0,
     };
     rooms.push(room);
   }
-  console.log(room);
   return room;
 }
 
