@@ -1,26 +1,30 @@
 <template>
   <div>
     <div>
-      <input type="text" v-model="videoRef" />
-      <input type="text" v-model="videoName" />
+      <input type="text" v-model="videoRef" placeholder="link to video" />
+      <input type="text" v-model="videoName" placeholder="video name" />
       <input type="button" @click="addTrack" value="Add Video" />
     </div>
 
-    <ul v-for="(clip, index) in playlist" v-bind:key="clip.name + '_' + index">
+    <!-- <ul v-for="(clip, index) in playlist" v-bind:key="clip.name + '_' + index">
       {{
         clip.name
       }}
       <input type="button" @click="setCurrent(index)" value="play" />
-    </ul>
+    </ul> -->
 
     <draggable
       v-model="playlist"
       @start="drag = true"
       @end="drag = false"
+      @update="playlistReorder"
       item-key="name"
     >
-      <template #item="{ element }">
-        <div>{{ element.name }}</div>
+      <template #item="{ element, index }">
+        <div>
+          {{ element.name }}
+          <input type="button" @click="setCurrent(index)" value="play" />
+        </div>
       </template>
     </draggable>
   </div>
@@ -63,6 +67,12 @@ export default {
       socket.emit("track:add", {
         video: this.videoRef,
         videoName: this.videoName,
+        to: this.roomid,
+      });
+    },
+    playlistReorder() {
+      socket.emit("track:switch", {
+        playlistData: this.$store.getters.playlistData,
         to: this.roomid,
       });
     },

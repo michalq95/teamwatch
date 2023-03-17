@@ -26,6 +26,7 @@ io.on("connection", async (socket) => {
 
   socket.on("track:switch", ({ playlistData, to }) => {
     let room = getRoomByName(to);
+    room.playlist = playlistData.playlist;
     room.currentIndex = playlistData.currentIndex;
 
     socket.to(to).emit("track:switch", room);
