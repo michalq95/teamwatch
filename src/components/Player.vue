@@ -7,7 +7,13 @@
       ref="youtube"
     />
     Shared: <input type="checkbox" v-model="shared" /> Volume:
-    <input type="range" min="1" max="100" v-model="hostVolume" />
+    <input
+      type="range"
+      min="1"
+      max="100"
+      v-model="hostVolume"
+      @change="volumeChange"
+    />
   </div>
 </template>
 <script>
@@ -65,6 +71,9 @@ export default {
         }
       }, 1000);
     });
+    socket.on("volume:change", ({ volume }) => {
+      if (this.shared) this.$refs.youtube.setVolume(volume);
+    });
   },
   methods: {
     onReady() {
@@ -97,6 +106,13 @@ export default {
           // socket.emit("track:cue", { to: this.roomid });
           break;
       }
+    },
+    volumeChange() {
+      socket.emit("volume:change", {
+        volume: this.hostVolume,
+        to: this.roomid,
+      });
+      if (this.shared) this.$refs.youtube.setVolume(this.hostVolume);
     },
   },
 };

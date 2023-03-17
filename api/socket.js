@@ -32,7 +32,6 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("track:add", ({ video, videoName, to }) => {
-    console.log(video);
     let videoLink = video;
     let room = getRoomByName(to);
     //should verify if valid youtube video
@@ -41,6 +40,10 @@ io.on("connection", async (socket) => {
       videoLink = `https://www.youtube.com/watch?v=${videoLink}`;
     room.playlist.push({ name: videoName, link: videoLink });
     io.in(to).emit("room", room);
+  });
+
+  socket.on("volume:change", ({ volume, to }) => {
+    socket.to(to).emit("volume:change", { volume });
   });
 });
 
