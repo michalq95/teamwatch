@@ -47,9 +47,23 @@ export default {
       this.$store.commit("setStatePlaylist", data.playlist);
       this.$store.commit("setIndex", data.currentIndex);
     });
-    socket.on("track:switch", (data) => {
-      this.$store.commit("setStatePlaylist", data.playlist);
-      this.$store.commit("setIndex", data.currentIndex);
+    socket.on("track:switch", async (data) => {
+      await this.$store.commit("setStatePlaylist", data.playlist);
+      await this.$store.commit("setIndex", data.currentIndex);
+      setTimeout(() => {
+        let playerstate = this.$refs.youtube.getPlayerState();
+        console.log(playerstate);
+        if (playerstate != 1) {
+          console.log("playing video");
+          this.$refs.youtube.playVideo();
+          setTimeout(() => {
+            if (this.$refs.youtube.getPlayerState() != 1) {
+              console.log("playing video once more, wy it has to be like this");
+              this.$refs.youtube.playVideo();
+            }
+          }, 2000);
+        }
+      }, 2000);
     });
   },
   methods: {
@@ -57,6 +71,7 @@ export default {
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
+      console.log(value);
       switch (value.data) {
         case 0: //song ended
           await this.$store.commit("incrementCurrentIndex");
@@ -77,7 +92,7 @@ export default {
           }
           break;
         case 5: //song seek
-          console.log("emit current position");
+          // console.log("emit current position");
           //dupa nie dziala, to nie to
           // socket.emit("track:cue", { to: this.roomid });
           break;

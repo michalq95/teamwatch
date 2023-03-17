@@ -23,9 +23,10 @@ export default {
   },
   methods: {
     setCurrent(index) {
-      socket.emit("track:choose", {
+      this.$store.commit("setIndex", index);
+      socket.emit("track:switch", {
+        playlistData: this.$store.getters.playlistData,
         to: this.roomid,
-        index,
       });
     },
   },
