@@ -6,6 +6,14 @@
       @stateChange="onStateChange"
       ref="youtube"
     />
+    Seek:<input
+      type="range"
+      min="0"
+      :max="maxTime || 0"
+      step="1"
+      v-model="currentTime"
+      @change="onInputRangeChange"
+    />
     Shared: <input type="checkbox" v-model="shared" /> Volume:
     <input
       type="range"
@@ -28,6 +36,8 @@ export default {
       currentClip: "",
       hostVolume: 50,
       shared: false,
+      currentTime: 0,
+      maxTime: 0,
     };
   },
   computed: {
@@ -48,7 +58,8 @@ export default {
       this.$refs.youtube.playVideo();
     });
     socket.on("track:pause", () => {
-      this.$refs.youtube.pauseVideo();
+      if (this.$refs.youtube.getPlayerState() == 1)
+        this.$refs.youtube.pauseVideo();
     });
     socket.on("room", (data) => {
       this.$store.commit("setStatePlaylist", data.playlist);
@@ -82,10 +93,10 @@ export default {
   methods: {
     onReady() {
       this.currentClip = this.currentClipLink;
+      this.maxTime = this.$refs.youtube.getDuration();
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
-      console.log(value);
       switch (value.data) {
         case 0: //song ended
           await this.$store.commit("incrementCurrentIndex");
@@ -97,6 +108,9 @@ export default {
 
           break;
         case 1: //song playing
+          setInterval(() => {
+            this.currentTime = this.$refs.youtube.getCurrentTime();
+          }, 1000);
           socket.emit("track:play", { to: this.roomid });
           break;
         case 2: //song paused
@@ -120,6 +134,10 @@ export default {
         to: this.roomid,
       });
       if (this.shared) this.$refs.youtube.setVolume(this.hostVolume);
+    },
+    onInputRangeChange(event) {
+      const seekToTime = Number(event.target.value);
+      this.$refs.youtube.seekTo(seekToTime);
     },
   },
 };
