@@ -12,12 +12,12 @@
       }}
       <input type="button" @click="setCurrent(index)" value="play" />
     </ul> -->
-
+    {{ playlist }}
     <draggable
       v-model="playlist"
       @start="drag = true"
       @end="drag = false"
-      @update="playlistReorder"
+      @change="playlistReorder"
       item-key="name"
     >
       <template #item="{ element, index }">
@@ -54,6 +54,9 @@ export default {
     roomid() {
       return this.$route.params.roomid;
     },
+    currentIndex() {
+      return this.$store.getters.getCurrentIndex;
+    },
   },
   methods: {
     setCurrent(index) {
@@ -70,7 +73,14 @@ export default {
         to: this.roomid,
       });
     },
-    playlistReorder() {
+    playlistReorder(item) {
+      console.log(item.moved);
+      if (item.moved.oldIndex == this.currentIndex) {
+        this.$store.commit("setIndex", item.moved.newIndex);
+      } else if (item.moved.newIndex == this.currentIndex) {
+        this.$store.commit("setIndex", item.moved.oldIndex);
+      }
+
       socket.emit("track:switch", {
         playlistData: this.$store.getters.playlistData,
         to: this.roomid,

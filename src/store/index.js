@@ -28,10 +28,17 @@ export default createStore({
     getPlaylist(state) {
       return state.playlist;
     },
+    getCurrentIndex(state) {
+      return state.currentIndex;
+    },
   },
   mutations: {
     incrementCurrentIndex(state) {
       state.currentIndex++;
+    },
+    setPlaylistData(state, playlistData) {
+      state.playlist = playlistData.playlist;
+      state.currentIndex = playlistData.currentIndex;
     },
     setStatePlaylist(state, playlist) {
       state.playlist = playlist;
