@@ -33,6 +33,7 @@ export default createStore({
     },
   },
   mutations: {
+    //should be done in action
     incrementCurrentIndex(state) {
       state.currentIndex++;
     },

@@ -27,7 +27,12 @@ io.on("connection", async (socket) => {
   socket.on("track:switch", ({ playlistData, to }) => {
     let room = getRoomByName(to);
     room.playlist = playlistData.playlist;
-    room.currentIndex = playlistData.currentIndex;
+    if (playlistData.currentIndex >= room.playlist.length) {
+      room.currentIndex = 0;
+    } else {
+      room.currentIndex = playlistData.currentIndex;
+    }
+    socket.emit("track:switch", room);
 
     socket.to(to).emit("track:switch", room);
   });

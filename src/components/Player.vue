@@ -1,7 +1,7 @@
 <template>
-  <div v-if="currentClipLink">
+  <div v-if="currentClip">
     <YouTube
-      v-bind:src="currentClipLink"
+      v-bind:src="currentClip"
       @ready="onReady"
       @stateChange="onStateChange"
       ref="youtube"
@@ -25,6 +25,7 @@ export default {
   components: { YouTube },
   data() {
     return {
+      currentClip: "",
       hostVolume: 50,
       shared: false,
     };
@@ -56,6 +57,8 @@ export default {
     socket.on("track:switch", async (data) => {
       await this.$store.commit("setStatePlaylist", data.playlist);
       await this.$store.commit("setIndex", data.currentIndex);
+      this.currentClip = this.currentClipLink;
+
       setTimeout(() => {
         let playerstate = this.$refs.youtube.getPlayerState();
         console.log(playerstate);
@@ -67,16 +70,18 @@ export default {
               console.log("playing video once more, wy it has to be like this");
               this.$refs.youtube.playVideo();
             }
-          }, 1000);
+          }, 1500);
         }
-      }, 1000);
+      }, 1500);
     });
     socket.on("volume:change", ({ volume }) => {
       if (this.shared) this.$refs.youtube.setVolume(volume);
     });
+    this.currentClip = this.currentClipLink;
   },
   methods: {
     onReady() {
+      this.currentClip = this.currentClipLink;
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
@@ -88,6 +93,8 @@ export default {
             playlistData: this.$store.getters.playlistData,
             to: this.roomid,
           });
+          this.currentClip = this.currentClipLink;
+
           break;
         case 1: //song playing
           socket.emit("track:play", { to: this.roomid });
