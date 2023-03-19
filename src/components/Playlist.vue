@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="playlistcomponent">
     <div>
       <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
@@ -93,21 +93,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.playlistcomponent {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 500px;
+}
 .list {
   display: flex;
-  height: 50px;
+  height: 700px;
   width: 300px;
   flex-direction: column;
   background-color: rgb(139, 209, 209);
-}
-.listelement {
-  border: 2px solid black;
-  border-radius: 5px;
-  width: 280px;
-  height: 30px;
-  margin: auto;
-  justify-content: left;
-  align-items: center;
-  align-content: flex-start;
+
+  .listelement {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 280px;
+    height: 30px;
+    margin: auto;
+    justify-content: left;
+    align-items: center;
+    align-content: flex-start;
+  }
 }
 </style>
