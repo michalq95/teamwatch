@@ -1,5 +1,6 @@
 const express = require("express");
-const User = require("../models/user.model.js");
+const User = require("../models/user.js");
+const asyncHandler = require("express-async-handler");
 
 const router = express.Router();
 router.post(
@@ -15,6 +16,28 @@ router.post(
     sendTokenResponse(user, 200, res);
   })
 );
+
+router.post(
+  "/login",
+  asyncHandler(async (req, res, next) => {
+    const { name, password } = req.body;
+    if (!name || !password) {
+      return next(res.status(400));
+    }
+    let user = await User.findOne({ name }).select("+password");
+    if (!user) {
+      return next(res.status(400));
+    }
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      return next(res.status(400));
+    }
+    sendTokenResponse(user, 200, res);
+  })
+);
+
+module.exports = router;
 
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();

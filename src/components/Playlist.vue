@@ -101,7 +101,7 @@ export default {
 }
 .list {
   display: flex;
-  height: 700px;
+  height: 100vh;
   width: 300px;
   flex-direction: column;
   background-color: rgb(139, 209, 209);

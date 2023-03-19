@@ -1,10 +1,33 @@
 <template>
+  <div v-if="isLoggedIn">
+    Welcome {{ user.name }}
+    <input type="button" value="Log out" @click="logOut" />
+  </div>
   <router-view />
   <!-- <iframe width="420" height="345" v-bind:src="currentClipLink"> </iframe> -->
 </template>
 <script>
+import { mapMutations } from "vuex";
+
 export default {
-  computed: {},
+  created() {
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      this.$store.commit("setUser", user);
+    }
+  },
+  methods: {
+    ...mapMutations(["logOut"]),
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
+  },
 };
 </script>
 <style lang="scss">

@@ -3,7 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     name: String,
-    host: true,
+    user: { name: null, token: null },
     playlist: [
       { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
       // { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
@@ -31,9 +31,18 @@ export default createStore({
     getCurrentIndex(state) {
       return state.currentIndex;
     },
+    isLoggedIn(state) {
+      return !!state.user.token;
+    },
+    getUser(state) {
+      return state.user;
+    },
   },
   mutations: {
-    //should be done in action
+    setUser(state, user) {
+      state.user.name = user.name;
+      state.user.token = user.token;
+    },
     incrementCurrentIndex(state) {
       state.currentIndex++;
     },
@@ -46,6 +55,10 @@ export default createStore({
     },
     setIndex(state, index) {
       state.currentIndex = index;
+    },
+    logOut(state) {
+      state.user = { name: null, token: null };
+      localStorage.clear();
     },
   },
   actions: {},
