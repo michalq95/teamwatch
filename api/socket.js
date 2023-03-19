@@ -51,6 +51,9 @@ io.on("connection", async (socket) => {
   socket.on("volume:change", ({ volume, to }) => {
     socket.to(to).emit("volume:change", { volume });
   });
+  socket.on("track:seek", ({ seekToTime, to }) => {
+    socket.to(to).emit("track:seek", { seekToTime });
+  });
 });
 
 module.exports = io;

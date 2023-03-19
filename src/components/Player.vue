@@ -1,19 +1,23 @@
 <template>
   <div v-if="currentClip">
-    <YouTube
-      v-bind:src="currentClip"
-      @ready="onReady"
-      @stateChange="onStateChange"
-      ref="youtube"
-    />
-    Seek:<input
-      type="range"
-      min="0"
-      :max="maxTime || 0"
-      step="1"
-      v-model="currentTime"
-      @change="onInputRangeChange"
-    />
+    <div class="player">
+      <YouTube
+        v-bind:src="currentClip"
+        @ready="onReady"
+        @stateChange="onStateChange"
+        ref="youtube"
+      />
+      Seek:<input
+        class="seek"
+        type="range"
+        min="0"
+        :max="maxTime || 0"
+        step="1"
+        v-model="currentTime"
+        @change="onInputRangeChange"
+      />
+      {{ maxTime }}
+    </div>
     Shared: <input type="checkbox" v-model="shared" /> Volume:
     <input
       type="range"
@@ -85,6 +89,9 @@ export default {
         }
       }, 1500);
     });
+    socket.on("track:seek", ({ seekToTime }) => {
+      if (this.shared) this.$refs.youtube.seekTo(seekToTime);
+    });
     socket.on("volume:change", ({ volume }) => {
       if (this.shared) this.$refs.youtube.setVolume(volume);
     });
@@ -93,7 +100,6 @@ export default {
   methods: {
     onReady() {
       this.currentClip = this.currentClipLink;
-      this.maxTime = this.$refs.youtube.getDuration();
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
@@ -108,6 +114,7 @@ export default {
 
           break;
         case 1: //song playing
+          this.maxTime = this.$refs.youtube.getDuration();
           setInterval(() => {
             this.currentTime = this.$refs.youtube.getCurrentTime();
           }, 1000);
@@ -138,8 +145,16 @@ export default {
     onInputRangeChange(event) {
       const seekToTime = Number(event.target.value);
       this.$refs.youtube.seekTo(seekToTime);
+      socket.emit("track:seek", { to: this.roomid, seekToTime });
     },
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.player {
+  width: 640px;
+}
+.seek {
+  width: 640px;
+}
+</style>
