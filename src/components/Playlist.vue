@@ -14,7 +14,9 @@
       <input type="button" @click="setCurrent(index)" value="play" />
     </ul> -->
     {{ playlist }}
+
     <draggable
+      class="list"
       v-model="playlist"
       @start="drag = true"
       @end="drag = false"
@@ -22,8 +24,8 @@
       item-key="name"
     >
       <template #item="{ element, index }">
-        <div>
-          {{ element.name }} {{ index }}
+        <div class="listelement">
+          <span>{{ element.name }}</span>
           <input type="button" @click="setCurrent(index)" value="play" />
         </div>
       </template>
@@ -90,4 +92,22 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.list {
+  display: flex;
+  height: 50px;
+  width: 300px;
+  flex-direction: column;
+  background-color: rgb(139, 209, 209);
+}
+.listelement {
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 280px;
+  height: 30px;
+  margin: auto;
+  justify-content: left;
+  align-items: center;
+  align-content: flex-start;
+}
+</style>
