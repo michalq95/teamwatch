@@ -11,7 +11,9 @@ io.use(async (socket, next) => {
 io.on("connection", async (socket) => {
   console.log(`A user connected to room ${socket.room}`);
   socket.join(socket.room);
-  socket.emit("room", createOrJoinRoom(socket.room));
+  const createdRoom = createOrJoinRoom(socket.room);
+  console.log(createdRoom);
+  socket.emit("room", createdRoom);
   socket.to(socket.room).emit("newuserconnected", {
     username: socket.username,
   });
@@ -26,12 +28,16 @@ io.on("connection", async (socket) => {
 
   socket.on("track:switch", ({ playlistData, to }) => {
     let room = getRoomByName(to);
+    console.log(playlistData);
     room.playlist = playlistData.playlist;
+
     if (playlistData.currentIndex >= room.playlist.length) {
       room.currentIndex = 0;
     } else {
       room.currentIndex = playlistData.currentIndex;
     }
+
+    room.currentVideo = room.playlist[room.currentIndex];
     socket.emit("track:switch", room);
 
     socket.to(to).emit("track:switch", room);

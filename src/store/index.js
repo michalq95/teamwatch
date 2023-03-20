@@ -5,11 +5,15 @@ export default createStore({
     name: String,
     user: { name: null, token: null },
     playlist: [
-      { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
+      // { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
       // { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
       // { name: "Immortal", link: "https://www.youtube.com/watch?v=ofyxXczVWKk" },
     ],
     currentIndex: 0,
+    currentVideo: {
+      name: "Muppets",
+      link: "https://www.youtube.com/embed/tgbNymZ7vqY",
+    },
     currentTime: 0,
   },
   getters: {
@@ -55,6 +59,9 @@ export default createStore({
     },
     setIndex(state, index) {
       state.currentIndex = index;
+    },
+    setCurrentVideo(state, index) {
+      state.currentVideo = index;
     },
     logOut(state) {
       state.user = { name: null, token: null };
