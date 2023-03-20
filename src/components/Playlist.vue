@@ -13,7 +13,7 @@
       }}
       <input type="button" @click="setCurrent(index)" value="play" />
     </ul> -->
-    {{ playlist }}
+    <!-- {{ playlist }} -->
 
     <draggable
       class="list"
@@ -26,6 +26,13 @@
       <template #item="{ element, index }">
         <div class="listelement">
           <span>{{ element.name }}</span>
+          <input
+            v-if="isLoggedIn"
+            type="button"
+            @click="addToCatalog(element)"
+            value="add"
+          />
+
           <input type="button" @click="setCurrent(index)" value="play" />
           <input type="button" @click="removeVideo(index)" value="del" />
         </div>
@@ -60,6 +67,9 @@ export default {
     },
     currentIndex() {
       return this.$store.getters.getCurrentIndex;
+    },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
     },
   },
   methods: {
@@ -100,6 +110,7 @@ export default {
       //     .concat(this.$store.getters.getPlaylist.slice(index + 1))
       // );
     },
+    addToCatalog(video) {},
   },
 };
 </script>

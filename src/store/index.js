@@ -12,6 +12,7 @@ export default createStore({
       link: "https://www.youtube.com/embed/tgbNymZ7vqY",
     },
     currentTime: 0,
+    activeCatalog: 0,
   },
   getters: {
     playlistData(state) {
@@ -40,6 +41,9 @@ export default createStore({
     },
     getLibrary(state) {
       return state.library;
+    },
+    getActiveCatalog(state) {
+      return state.activeCatalog;
     },
   },
   mutations: {
@@ -70,6 +74,9 @@ export default createStore({
     },
     setLibrary(state, library) {
       state.library = library;
+    },
+    setActiveCatalog(state, catalog) {
+      state.activeCatalog = catalog;
     },
   },
   actions: {},
