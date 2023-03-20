@@ -68,8 +68,8 @@ export default {
     socket.on("room", (data) => {
       this.$store.commit("setStatePlaylist", data.playlist);
       this.$store.commit("setIndex", data.currentIndex);
-      this.$store.commit("setCurrentVideo", data.currentVideo);
-      this.currentClip = data.currentVideo;
+      // this.$store.commit("setCurrentVideo", data.currentVideo);
+      // this.currentClip = data.currentVideo;
     });
     socket.on("track:switch", async (data) => {
       await this.$store.commit("setStatePlaylist", data.playlist);

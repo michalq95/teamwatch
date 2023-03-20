@@ -78,25 +78,27 @@ export default {
       });
     },
     playlistReorder(item) {
-      console.log(item.moved);
       if (item.moved.oldIndex == this.currentIndex) {
         this.$store.commit("setIndex", item.moved.newIndex);
       } else if (item.moved.newIndex == this.currentIndex) {
         this.$store.commit("setIndex", item.moved.oldIndex);
       }
-      console.log(this.$store.getters.playlistData);
       socket.emit("track:switch", {
         playlistData: this.$store.getters.playlistData,
         to: this.roomid,
       });
     },
     removeVideo(index) {
-      this.$store.commit(
-        "setStatePlaylist",
-        this.$store.getters.getPlaylist
-          .slice(0, index)
-          .concat(this.$store.getters.getPlaylist.slice(index + 1))
-      );
+      socket.emit("room", {
+        index,
+        to: this.roomid,
+      });
+      // this.$store.commit(
+      //   "setStatePlaylist",
+      //   this.$store.getters.getPlaylist
+      //     .slice(0, index)
+      //     .concat(this.$store.getters.getPlaylist.slice(index + 1))
+      // );
     },
   },
 };

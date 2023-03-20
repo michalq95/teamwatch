@@ -13,7 +13,7 @@ io.on("connection", async (socket) => {
   socket.join(socket.room);
   const createdRoom = createOrJoinRoom(socket.room);
   console.log(createdRoom);
-  socket.emit("room", createdRoom);
+  socket.emit("track:switch", createdRoom);
   socket.to(socket.room).emit("newuserconnected", {
     username: socket.username,
   });
@@ -28,7 +28,6 @@ io.on("connection", async (socket) => {
 
   socket.on("track:switch", ({ playlistData, to }) => {
     let room = getRoomByName(to);
-    console.log(playlistData);
     room.playlist = playlistData.playlist;
 
     if (playlistData.currentIndex >= room.playlist.length) {
@@ -59,6 +58,15 @@ io.on("connection", async (socket) => {
   });
   socket.on("track:seek", ({ seekToTime, to }) => {
     socket.to(to).emit("track:seek", { seekToTime });
+  });
+  socket.on("room", ({ index, to }) => {
+    let room = getRoomByName(to);
+    // room.playlist = playlistData.playlist;
+    room.playlist = room.playlist
+      .slice(0, index)
+      .concat(room.playlist.slice(index + 1));
+    socket.emit("room", room);
+    socket.to(to).emit("room", room);
   });
 });
 

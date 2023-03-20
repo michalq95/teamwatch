@@ -4,11 +4,8 @@ export default createStore({
   state: {
     name: String,
     user: { name: null, token: null },
-    playlist: [
-      // { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
-      // { name: "FLoat", link: "https://www.youtube.com/watch?v=REvMpqy9G0c" },
-      // { name: "Immortal", link: "https://www.youtube.com/watch?v=ofyxXczVWKk" },
-    ],
+    library: [],
+    playlist: [],
     currentIndex: 0,
     currentVideo: {
       name: "Muppets",
@@ -41,6 +38,9 @@ export default createStore({
     getUser(state) {
       return state.user;
     },
+    getLibrary(state) {
+      return state.library;
+    },
   },
   mutations: {
     setUser(state, user) {
@@ -65,7 +65,11 @@ export default createStore({
     },
     logOut(state) {
       state.user = { name: null, token: null };
+      state.library = [];
       localStorage.clear();
+    },
+    setLibrary(state, library) {
+      state.library = library;
     },
   },
   actions: {},

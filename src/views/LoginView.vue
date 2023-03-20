@@ -81,6 +81,7 @@ export default {
               name: data.user.name,
               token: data.token,
             });
+            this.$store.commit("setLibrary", data.user.playlists);
           }
         } catch (e) {
           this.unsuccesful = true;
@@ -88,7 +89,7 @@ export default {
         }
       }
     },
-    async RegisterMe() {
+    async registerMe() {
       if (
         this.registerData.password &&
         this.registerData.name &&

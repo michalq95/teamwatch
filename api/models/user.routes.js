@@ -11,6 +11,7 @@ router.post(
       name,
       email,
       password,
+      playlists: [{ name: "default", playlist: [] }],
     });
 
     sendTokenResponse(user, 200, res);
