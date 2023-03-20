@@ -27,6 +27,7 @@
         <div class="listelement">
           <span>{{ element.name }}</span>
           <input type="button" @click="setCurrent(index)" value="play" />
+          <input type="button" @click="removeVideo(index)" value="del" />
         </div>
       </template>
     </draggable>
@@ -88,6 +89,14 @@ export default {
         playlistData: this.$store.getters.playlistData,
         to: this.roomid,
       });
+    },
+    removeVideo(index) {
+      this.$store.commit(
+        "setStatePlaylist",
+        this.$store.getters.getPlaylist
+          .slice(0, index)
+          .concat(this.$store.getters.getPlaylist.slice(index + 1))
+      );
     },
   },
 };
