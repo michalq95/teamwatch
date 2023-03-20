@@ -2,7 +2,7 @@
   <div v-if="currentClip">
     <div class="player">
       <YouTube
-        v-bind:src="currentClip"
+        v-bind:src="currentClip.link"
         @ready="onReady"
         @stateChange="onStateChange"
         ref="youtube"
@@ -68,11 +68,15 @@ export default {
     socket.on("room", (data) => {
       this.$store.commit("setStatePlaylist", data.playlist);
       this.$store.commit("setIndex", data.currentIndex);
+      this.$store.commit("setCurrentVideo", data.currentVideo);
+      this.currentClip = data.currentVideo;
     });
     socket.on("track:switch", async (data) => {
       await this.$store.commit("setStatePlaylist", data.playlist);
       await this.$store.commit("setIndex", data.currentIndex);
-      this.currentClip = this.currentClipLink;
+      await this.$store.commit("setCurrentVideo", data.currentVideo);
+      console.log(data.currentVideo);
+      this.currentClip = data.currentVideo;
 
       setTimeout(() => {
         let playerstate = this.$refs.youtube.getPlayerState();
@@ -80,12 +84,12 @@ export default {
         if (playerstate != 1) {
           console.log("playing video");
           this.$refs.youtube.playVideo();
-          setTimeout(() => {
-            if (this.$refs.youtube.getPlayerState() != 1) {
-              console.log("playing video once more, wy it has to be like this");
-              this.$refs.youtube.playVideo();
-            }
-          }, 1500);
+          // setTimeout(() => {
+          //   if (this.$refs.youtube.getPlayerState() != 1) {
+          //     console.log("playing video once more, wy it has to be like this");
+          //     this.$refs.youtube.playVideo();
+          //   }
+          // }, 1500);
         }
       }, 1500);
     });
@@ -95,11 +99,13 @@ export default {
     socket.on("volume:change", ({ volume }) => {
       if (this.shared) this.$refs.youtube.setVolume(volume);
     });
-    this.currentClip = this.currentClipLink;
+    // this.currentClip = this.currentClipLink;
   },
   methods: {
     onReady() {
-      this.currentClip = this.currentClipLink;
+      // this.currentClip = this.currentClipLink;
+      // this.currentClip = data.currentVideo;
+
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
@@ -110,7 +116,7 @@ export default {
             playlistData: this.$store.getters.playlistData,
             to: this.roomid,
           });
-          this.currentClip = this.currentClipLink;
+          // this.currentClip = this.currentClipLink;
 
           break;
         case 1: //song playing
