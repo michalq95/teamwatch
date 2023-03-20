@@ -100,21 +100,24 @@ export default {
   width: 500px;
 }
 .list {
+  position: absolute;
   display: flex;
   height: 100vh;
+  right: 0;
   width: 300px;
   flex-direction: column;
-  background-color: rgb(139, 209, 209);
 
   .listelement {
     border: 2px solid black;
     border-radius: 5px;
-    width: 280px;
-    height: 30px;
-    margin: auto;
-    justify-content: left;
-    align-items: center;
-    align-content: flex-start;
+    background-color: rgb(139, 209, 209);
+
+    // width: 280px;
+    // height: 30px;
+    // margin: auto;
+    // justify-content: left;
+    // align-items: center;
+    // align-content: flex-start;
   }
 }
 </style>
