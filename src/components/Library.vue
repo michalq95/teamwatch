@@ -1,7 +1,7 @@
 <template>
   Library {{ activeCatalog }}
   <input type="button" @click="loadLibrary()" value="load" />
-  <input type="button" @click="saveLibrary(library)" value="save" />
+  <input type="button" @click="saveLibrary()" value="save" />
   <div
     v-for="(catalog, index) in library"
     :key="index"
@@ -56,6 +56,13 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  mounted() {
+    // console.log(this.library.length);
+    if (this.library.length == 0) {
+      console.log("no lib");
+      this.loadLibrary();
+    }
+  },
   methods: {
     openCloseCatalog(index) {
       if (this.openedCatalogs.includes(index)) {
@@ -73,7 +80,7 @@ export default {
         to: this.roomid,
       });
     },
-    async saveLibrary(library) {
+    async saveLibrary() {
       let uri = "http://localhost:5000/api/user/library";
       try {
         const res = await fetch(uri, {
@@ -84,6 +91,24 @@ export default {
             authorization: `Bearer ${this.user.token}`,
           },
           body: JSON.stringify(this.library),
+        });
+        const data = await res.json();
+        console.log(data);
+        this.library = data.data;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async loadLibrary() {
+      let uri = "http://localhost:5000/api/user/library";
+      try {
+        const res = await fetch(uri, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            // "Content-Type": "application/json",
+            authorization: `Bearer ${this.user.token}`,
+          },
         });
         const data = await res.json();
         console.log(data);
