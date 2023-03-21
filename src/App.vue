@@ -1,15 +1,18 @@
 <template>
-  <div v-if="isLoggedIn">
+  <Navigation></Navigation>
+  <!-- <div v-if="isLoggedIn">
     Welcome {{ user.name }}
     <input type="button" value="Log out" @click="logOut" />
-  </div>
+  </div> -->
   <router-view />
   <!-- <iframe width="420" height="345" v-bind:src="currentClipLink"> </iframe> -->
 </template>
 <script>
 import { mapMutations } from "vuex";
+import Navigation from "./components/Navigation.vue";
 
 export default {
+  components: { Navigation },
   created() {
     let user = localStorage.getItem("user");
     if (user) {
@@ -17,9 +20,7 @@ export default {
       this.$store.commit("setUser", user);
     }
   },
-  methods: {
-    ...mapMutations(["logOut"]),
-  },
+
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;

@@ -1,7 +1,7 @@
 <template>
   <input type="text" v-model="roomName" />
   <input type="button" value="Join/Create room" @click="navigateToRoom" />
-  <div v-if="!isLoggedIn">
+  <!-- <div v-if="!isLoggedIn">
     Login:
     <form @submit.prevent="login">
       <input
@@ -39,56 +39,21 @@
       />
       <button class="login" @click="registerMe" type="submit">Register</button>
     </form>
-  </div>
+  </div> -->
 </template>
 <script>
 export default {
   data() {
     return {
       roomName: "room",
-      loginData: {},
       registerData: {},
-      unsuccesful: false,
     };
   },
   methods: {
     navigateToRoom() {
       this.$router.push({ name: "room", params: { roomid: this.roomName } });
     },
-    async loginMe() {
-      if (this.loginData.password && this.loginData.name) {
-        let uri = "http://localhost:5000/api/user/login";
-        try {
-          const res = await fetch(uri, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.loginData),
-          });
 
-          const data = await res.json();
-          if (data.success) {
-            let jsonstring = JSON.stringify({
-              name: data.user.name,
-              token: data.token,
-            });
-            localStorage.setItem("user", jsonstring);
-            console.log(jsonstring);
-
-            this.$store.commit("setUser", {
-              name: data.user.name,
-              token: data.token,
-            });
-            this.$store.commit("setLibrary", data.user.playlists);
-          }
-        } catch (e) {
-          this.unsuccesful = true;
-          console.error(e);
-        }
-      }
-    },
     async registerMe() {
       if (
         this.registerData.password &&

@@ -42,6 +42,7 @@ export default {
       shared: false,
       currentTime: 0,
       maxTime: 0,
+      updateInterval: null,
     };
   },
   computed: {
@@ -52,7 +53,8 @@ export default {
       return this.$route.params.roomid;
     },
   },
-  async created() {
+  async mounted() {
+    console.log("moiunted");
     socket.auth = { room: this.roomid };
     socket.connect();
     socket.on("newuserconnected", ({ username }) => {
@@ -89,7 +91,7 @@ export default {
             //   }
             // }, 1500);
           }
-        }, 1500);
+        }, 2000);
       }
     });
     socket.on("track:seek", ({ seekToTime }) => {
@@ -100,6 +102,22 @@ export default {
     });
     // this.currentClip = this.currentClipLink;
   },
+  beforeUnmount() {
+    try {
+      clearInterval(this.updateInterval);
+      // this.$refs.youtube.stopVideo();
+      // this.$refs.youtube.destroy;
+      // this.$refs.youtube = null;
+      socket.disconnect();
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  // unmounted() {
+  //   this.$refs.youtube.destroy();
+  //   socket.disconnect();
+  // },
+
   methods: {
     onReady() {
       // this.currentClip = this.currentClipLink;
@@ -120,9 +138,11 @@ export default {
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          setInterval(() => {
+
+          this.updateInterval = setInterval(() => {
             this.currentTime = this.$refs.youtube.getCurrentTime();
           }, 1000);
+
           socket.emit("track:play", { to: this.roomid });
           break;
         case 2: //song paused

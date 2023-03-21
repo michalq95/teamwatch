@@ -57,9 +57,7 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.library.length);
     if (this.library.length == 0) {
-      console.log("no lib");
       this.loadLibrary();
     }
   },

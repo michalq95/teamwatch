@@ -128,9 +128,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .playlistcomponent {
-  position: fixed;
+  position: absolute;
   right: 0;
-  top: 0;
+  // top: 0;
   width: 500px;
   border-radius: 5%;
 
