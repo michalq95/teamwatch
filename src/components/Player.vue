@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentClip">
+  <div>
     <div class="player">
       <YouTube
         v-bind:src="currentClip.link"
@@ -77,21 +77,20 @@ export default {
       await this.$store.commit("setCurrentVideo", data.currentVideo);
       console.log(data.currentVideo);
       this.currentClip = data.currentVideo;
-
-      setTimeout(() => {
-        let playerstate = this.$refs.youtube.getPlayerState();
-        console.log(playerstate);
-        if (playerstate != 1) {
-          console.log("playing video");
-          this.$refs.youtube.playVideo();
-          // setTimeout(() => {
-          //   if (this.$refs.youtube.getPlayerState() != 1) {
-          //     console.log("playing video once more, wy it has to be like this");
-          //     this.$refs.youtube.playVideo();
-          //   }
-          // }, 1500);
-        }
-      }, 1500);
+      if (this.currentClip) {
+        setTimeout(() => {
+          let playerstate = this.$refs.youtube.getPlayerState();
+          if (playerstate != 1) {
+            this.$refs.youtube.playVideo();
+            // setTimeout(() => {
+            //   if (this.$refs.youtube.getPlayerState() != 1) {
+            //     console.log("playing video once more, wy it has to be like this");
+            //     this.$refs.youtube.playVideo();
+            //   }
+            // }, 1500);
+          }
+        }, 1500);
+      }
     });
     socket.on("track:seek", ({ seekToTime }) => {
       if (this.shared) this.$refs.youtube.seekTo(seekToTime);
