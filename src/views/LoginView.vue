@@ -82,6 +82,34 @@ export default {
               token: data.token,
             });
             this.$store.commit("setLibrary", data.user.playlists);
+            // this.$store.commit("setLibrary", [
+            //   {
+            //     name: "rock",
+            //     playlist: [
+            //       {
+            //         name: "Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa ",
+            //         link: "https://www.youtube.com/watch?v=VHsLQ3Dzb_k",
+            //       },
+            //       {
+            //         name: "Sentinel",
+            //         link: "https://www.youtube.com/watch?v=8Ksksu9JDkg",
+            //       },
+            //     ],
+            //   },
+            //   {
+            //     name: "bardzo bardzo śmieszne rzeczy",
+            //     playlist: [
+            //       {
+            //         name: "Brzuch boli",
+            //         link: "https://www.youtube.com/watch?v=Va6prfeTC5Q",
+            //       },
+            //       {
+            //         name: "oof",
+            //         link: "https://www.youtube.com/watch?v=YTC75cKzuNk",
+            //       },
+            //     ],
+            //   },
+            // ]);
           }
         } catch (e) {
           this.unsuccesful = true;

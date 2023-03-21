@@ -62,6 +62,14 @@ export default {
         this.$store.commit("setStatePlaylist", value);
       },
     },
+    library: {
+      get() {
+        return this.$store.getters.getLibrary;
+      },
+      set(value) {
+        this.$store.commit("setLibrary", value);
+      },
+    },
     roomid() {
       return this.$route.params.roomid;
     },
@@ -110,7 +118,11 @@ export default {
       //     .concat(this.$store.getters.getPlaylist.slice(index + 1))
       // );
     },
-    addToCatalog(video) {},
+    addToCatalog(video) {
+      let lib = this.library;
+      lib[this.$store.getters.getActiveCatalog].playlist.push(video);
+      this.library = lib;
+    },
   },
 };
 </script>

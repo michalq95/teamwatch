@@ -1,6 +1,7 @@
 <template>
   Library {{ activeCatalog }}
-
+  <input type="button" @click="loadLibrary()" value="load" />
+  <input type="button" @click="saveLibrary(library)" value="save" />
   <div
     v-for="(catalog, index) in library"
     :key="index"
@@ -25,52 +26,34 @@ export default {
   name: "Library",
   data() {
     return {
-      library: [
-        {
-          name: "rock",
-          playlist: [
-            {
-              name: "Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa Bardzo długa nazwa ",
-              link: "https://www.youtube.com/watch?v=VHsLQ3Dzb_k",
-            },
-            {
-              name: "Sentinel",
-              link: "https://www.youtube.com/watch?v=8Ksksu9JDkg",
-            },
-          ],
-        },
-        {
-          name: "śmieszne rzeczy",
-          playlist: [
-            {
-              name: "Brzuch boli",
-              link: "https://www.youtube.com/watch?v=Va6prfeTC5Q",
-            },
-            {
-              name: "oof",
-              link: "https://www.youtube.com/watch?v=YTC75cKzuNk",
-            },
-          ],
-        },
-      ],
       openedCatalogs: [],
     };
   },
   computed: {
-    // library() {
-    //   return this.$store.getters.getLibrary;
-    // },
+    library: {
+      get() {
+        return this.$store.getters.getLibrary;
+      },
+      set(value) {
+        this.$store.commit("setLibrary", value);
+      },
+    },
     activeCatalog: {
       get() {
         return this.$store.getters.getActiveCatalog;
       },
       set(value) {
-        console.log("aaa" + value);
         this.$store.commit("setActiveCatalog", value);
       },
     },
     roomid() {
       return this.$route.params.roomid;
+    },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+    user() {
+      return this.$store.getters.getUser;
     },
   },
   methods: {
@@ -89,6 +72,25 @@ export default {
         videoName: video.name,
         to: this.roomid,
       });
+    },
+    async saveLibrary(library) {
+      let uri = "http://localhost:5000/api/user/library";
+      try {
+        const res = await fetch(uri, {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${this.user.token}`,
+          },
+          body: JSON.stringify(this.library),
+        });
+        const data = await res.json();
+        console.log(data);
+        this.library = data.data;
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

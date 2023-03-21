@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user.js");
 const asyncHandler = require("express-async-handler");
+const { protect } = require("./middleware");
 
 const router = express.Router();
 router.post(
@@ -37,6 +38,29 @@ router.post(
     sendTokenResponse(user, 200, res);
   })
 );
+
+router
+  .route("/library")
+  .post(
+    protect,
+    asyncHandler(async (req, res, next) => {
+      // let user = await User.findById(req.user.id);
+      // if (!user) return res.status(404)
+      let user = await User.findByIdAndUpdate(
+        req.user.id,
+        { playlists: req.body },
+        { new: true, runValidators: true }
+      );
+      return res.status(200).json({ data: user.playlists });
+    })
+  )
+  .get(
+    protect,
+    asyncHandler(async (req, res, next) => {
+      let user = await User.findById(req.user.id);
+      return res.status(200).json({ data: user.playlists });
+    })
+  );
 
 module.exports = router;
 
