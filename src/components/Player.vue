@@ -54,52 +54,6 @@ export default {
     },
   },
   async mounted() {
-    console.log("moiunted");
-    socket.auth = { room: this.roomid };
-    socket.connect();
-    socket.on("newuserconnected", ({ username }) => {
-      console.log(`user ${username} connected to room ${this.roomid}`);
-    });
-    socket.on("track:play", () => {
-      this.$refs.youtube.playVideo();
-    });
-    socket.on("track:pause", () => {
-      if (this.$refs.youtube.getPlayerState() == 1)
-        this.$refs.youtube.pauseVideo();
-    });
-    socket.on("room", (data) => {
-      this.$store.commit("setStatePlaylist", data.playlist);
-      this.$store.commit("setIndex", data.currentIndex);
-      // this.$store.commit("setCurrentVideo", data.currentVideo);
-      // this.currentClip = data.currentVideo;
-    });
-    socket.on("track:switch", async (data) => {
-      await this.$store.commit("setStatePlaylist", data.playlist);
-      await this.$store.commit("setIndex", data.currentIndex);
-      await this.$store.commit("setCurrentVideo", data.currentVideo);
-      console.log(data.currentVideo);
-      this.currentClip = data.currentVideo;
-      if (this.currentClip) {
-        setTimeout(() => {
-          let playerstate = this.$refs.youtube.getPlayerState();
-          if (playerstate != 1) {
-            this.$refs.youtube.playVideo();
-            // setTimeout(() => {
-            //   if (this.$refs.youtube.getPlayerState() != 1) {
-            //     console.log("playing video once more, wy it has to be like this");
-            //     this.$refs.youtube.playVideo();
-            //   }
-            // }, 1500);
-          }
-        }, 2000);
-      }
-    });
-    socket.on("track:seek", ({ seekToTime }) => {
-      if (this.shared) this.$refs.youtube.seekTo(seekToTime);
-    });
-    socket.on("volume:change", ({ volume }) => {
-      if (this.shared) this.$refs.youtube.setVolume(volume);
-    });
     // this.currentClip = this.currentClipLink;
   },
   beforeUnmount() {
@@ -122,7 +76,53 @@ export default {
     onReady() {
       // this.currentClip = this.currentClipLink;
       // this.currentClip = data.currentVideo;
+      console.log("moiunted");
 
+      socket.auth = { room: this.roomid };
+      socket.connect();
+      socket.on("newuserconnected", ({ username }) => {
+        console.log(`user ${username} connected to room ${this.roomid}`);
+      });
+      socket.on("track:play", () => {
+        this.$refs.youtube.playVideo();
+      });
+      socket.on("track:pause", () => {
+        if (this.$refs.youtube.getPlayerState() == 1)
+          this.$refs.youtube.pauseVideo();
+      });
+      socket.on("room", (data) => {
+        this.$store.commit("setStatePlaylist", data.playlist);
+        this.$store.commit("setIndex", data.currentIndex);
+        // this.$store.commit("setCurrentVideo", data.currentVideo);
+        // this.currentClip = data.currentVideo;
+      });
+      socket.on("track:switch", async (data) => {
+        await this.$store.commit("setStatePlaylist", data.playlist);
+        await this.$store.commit("setIndex", data.currentIndex);
+        await this.$store.commit("setCurrentVideo", data.currentVideo);
+        console.log(data.currentVideo);
+        this.currentClip = data.currentVideo;
+        if (this.currentClip) {
+          // setTimeout(() => {
+          //   let playerstate = this.$refs.youtube.getPlayerState();
+          //   if (playerstate != 1) {
+          //     this.$refs.youtube.playVideo();
+          //     // setTimeout(() => {
+          //     //   if (this.$refs.youtube.getPlayerState() != 1) {
+          //     //     console.log("playing video once more, wy it has to be like this");
+          //     //     this.$refs.youtube.playVideo();
+          //     //   }
+          //     // }, 1500);
+          //   }
+          // }, 2000);
+        }
+      });
+      socket.on("track:seek", ({ seekToTime }) => {
+        if (this.shared) this.$refs.youtube.seekTo(seekToTime);
+      });
+      socket.on("volume:change", ({ volume }) => {
+        if (this.shared) this.$refs.youtube.setVolume(volume);
+      });
       this.$refs.youtube.playVideo();
     },
     async onStateChange(value) {
