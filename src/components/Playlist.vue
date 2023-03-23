@@ -131,8 +131,9 @@ export default {
   // position: absolute;
   // right: 0;
   // top: 0;
-  width: 500px;
+  // width: 500px;
   border-radius: 5%;
+  margin: 10px;
 
   background-color: whitesmoke;
   overflow: hidden;

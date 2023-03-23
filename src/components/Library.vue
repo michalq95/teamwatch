@@ -13,11 +13,16 @@
   </span>
 
   <div
+    class="library"
     v-for="(catalog, index) in library"
     :key="index"
     @click="activeCatalog = index"
   >
-    {{ catalog.name }}
+    <span
+      class="playlist-name"
+      :style="index == activeCatalog ? 'font-weight:bold' : ''"
+      >{{ catalog.name }}</span
+    >
     <input type="button" @click="openCloseCatalog(index)" value="open" />
     <div
       v-if="openedCatalogs.includes(index)"
@@ -143,4 +148,11 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.library {
+  background-color: beige;
+  .playlist-name {
+    background-color: bisque;
+  }
+}
+</style>
