@@ -102,20 +102,20 @@ export default {
         await this.$store.commit("setCurrentVideo", data.currentVideo);
         console.log(data.currentVideo);
         this.currentClip = data.currentVideo;
-        if (this.currentClip) {
-          // setTimeout(() => {
-          //   let playerstate = this.$refs.youtube.getPlayerState();
-          //   if (playerstate != 1) {
-          //     this.$refs.youtube.playVideo();
-          //     // setTimeout(() => {
-          //     //   if (this.$refs.youtube.getPlayerState() != 1) {
-          //     //     console.log("playing video once more, wy it has to be like this");
-          //     //     this.$refs.youtube.playVideo();
-          //     //   }
-          //     // }, 1500);
-          //   }
-          // }, 2000);
-        }
+        // if (this.currentClip) {
+        // setTimeout(() => {
+        //   let playerstate = this.$refs.youtube.getPlayerState();
+        //   if (playerstate != 1) {
+        //     this.$refs.youtube.playVideo();
+        //     // setTimeout(() => {
+        //     //   if (this.$refs.youtube.getPlayerState() != 1) {
+        //     //     console.log("playing video once more, wy it has to be like this");
+        //     //     this.$refs.youtube.playVideo();
+        //     //   }
+        //     // }, 1500);
+        //   }
+        // }, 2000);
+        // }
       });
       socket.on("track:seek", ({ seekToTime }) => {
         if (this.shared) this.$refs.youtube.seekTo(seekToTime);
@@ -124,6 +124,9 @@ export default {
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
       this.$refs.youtube.playVideo();
+      this.updateInterval = setInterval(() => {
+        this.currentTime = this.$refs.youtube.getCurrentTime();
+      }, 1000);
     },
     async onStateChange(value) {
       switch (value.data) {
@@ -138,11 +141,6 @@ export default {
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-
-          this.updateInterval = setInterval(() => {
-            this.currentTime = this.$refs.youtube.getCurrentTime();
-          }, 1000);
-
           socket.emit("track:play", { to: this.roomid });
           break;
         case 2: //song paused

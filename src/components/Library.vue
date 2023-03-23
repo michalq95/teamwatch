@@ -2,6 +2,16 @@
   Library {{ activeCatalog }}
   <input type="button" @click="loadLibrary()" value="load" />
   <input type="button" @click="saveLibrary()" value="save" />
+  <input
+    type="button"
+    @click="showNewDir = !showNewDir"
+    value="add Directory"
+  />
+  <span v-if="showNewDir">
+    <input type="text" v-model="newDirName" placeholder="new dir name" />
+    <input type="button" @click="newDir" value="addDir" />
+  </span>
+
   <div
     v-for="(catalog, index) in library"
     :key="index"
@@ -16,6 +26,11 @@
     >
       {{ video.name }}
       <input type="button" @click="addToPlaylist(video)" value="add" />
+      <input
+        type="button"
+        @click="removeFromPlaylist(index, index2)"
+        value="remove"
+      />
     </div>
   </div>
 </template>
@@ -27,6 +42,8 @@ export default {
   data() {
     return {
       openedCatalogs: [],
+      showNewDir: false,
+      newDirName: "",
     };
   },
   computed: {
@@ -71,12 +88,20 @@ export default {
         this.openedCatalogs.push(index);
       }
     },
+    newDir() {
+      this.library.push({ name: this.newDirName, playlist: [] });
+      this.showNewDir = false;
+      this.newDirName = "";
+    },
     addToPlaylist(video) {
       socket.emit("track:add", {
         video: video.link,
         videoName: video.name,
         to: this.roomid,
       });
+    },
+    removeFromPlaylist(index, index2) {
+      this.library[index].playlist.splice(index2, 1);
     },
     async saveLibrary() {
       let uri = "http://localhost:5000/api/user/library";

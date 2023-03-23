@@ -1,9 +1,7 @@
 <template>
   <div class="room">
     <Player></Player>
-    <div class="right">
-      <Playlist></Playlist>
-    </div>
+    <Playlist></Playlist>
     <div v-if="isLoggedIn">
       <Library></Library>
     </div>

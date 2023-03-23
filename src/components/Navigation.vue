@@ -22,7 +22,7 @@
         <div v-else>Welcome {{ user.name }}</div>
         <ul>
           <!-- <router-link class="link" to="{ name: 'Home' }">Home</router-link> -->
-          <router-link v-if="!isLoggedIn" class="link" to="#"
+          <router-link v-if="!isLoggedIn" class="link" to="/register"
             >Register</router-link
           >
           <input v-else type="button" value="Log out" @click="logOut" />
