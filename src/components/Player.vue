@@ -16,7 +16,6 @@
         v-model="currentTime"
         @change="onInputRangeChange"
       />
-      {{ maxTime }}
     </div>
     Shared: <input type="checkbox" v-model="shared" /> Volume:
     <input
@@ -76,8 +75,6 @@ export default {
     onReady() {
       // this.currentClip = this.currentClipLink;
       // this.currentClip = data.currentVideo;
-      console.log("moiunted");
-
       socket.auth = { room: this.roomid };
       socket.connect();
       socket.on("newuserconnected", ({ username }) => {
@@ -100,8 +97,7 @@ export default {
         await this.$store.commit("setStatePlaylist", data.playlist);
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
-        console.log(data.currentVideo);
-        this.currentClip = data.currentVideo;
+        if (data.currentVideo) this.currentClip = data.currentVideo;
         // if (this.currentClip) {
         // setTimeout(() => {
         //   let playerstate = this.$refs.youtube.getPlayerState();

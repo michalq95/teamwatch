@@ -4,8 +4,8 @@
     <Playlist></Playlist>
     <div v-if="isLoggedIn">
       <Library></Library>
-      <Search></Search>
     </div>
+    <Search></Search>
   </div>
 </template>
 

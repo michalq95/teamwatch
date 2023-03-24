@@ -1,6 +1,11 @@
 <template>
   <div>
-    <input type="text" v-model="searchPhrase" placeholder="Search" />
+    <input
+      type="text"
+      v-model="searchPhrase"
+      placeholder="Search"
+      @keyup.enter="search"
+    />
     <input type="button" @click="search" value="Search" />
 
     <div v-if="foundVideos">
@@ -13,6 +18,7 @@
             value="AddToPlaylist"
           />
           <input
+            v-if="isLoggedIn"
             type="button"
             @click="addToLibrary(video)"
             value="AddToLibrary"
@@ -84,6 +90,9 @@ export default {
     },
     roomid() {
       return this.$route.params.roomid;
+    },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
     },
   },
 };

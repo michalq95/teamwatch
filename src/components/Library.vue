@@ -1,5 +1,5 @@
 <template>
-  Library {{ activeCatalog }}
+  Library
   <input type="button" @click="loadLibrary()" value="load" />
   <input type="button" @click="saveLibrary()" value="save" />
   <input

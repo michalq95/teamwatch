@@ -4,7 +4,6 @@
       <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
       <input type="button" @click="addTrack" value="Add Video" />
-      {{ currentIndex }}
     </div>
 
     <!-- <ul v-for="(clip, index) in playlist" v-bind:key="clip.name + '_' + index">
