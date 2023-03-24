@@ -72,7 +72,7 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("search:youtube", async ({ searchPhrase }) => {
-    const url = `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBEAPI}&q=${searchPhrase}&part=snippet&type=video`;
+    const url = `https://www.googleapis.com/youtube/v3/search?maxResults=20&key=${process.env.YOUTUBEAPI}&q=${searchPhrase}&part=snippet&type=video`;
 
     try {
       const res = await axios.get(url);
