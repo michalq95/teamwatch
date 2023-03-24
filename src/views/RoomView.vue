@@ -1,11 +1,11 @@
 <template>
   <div class="room">
-    <Player></Player>
-    <Playlist></Playlist>
+    <Player class="comp"></Player>
+    <Playlist class="comp"></Playlist>
     <div v-if="isLoggedIn">
-      <Library></Library>
+      <Library class="comp"></Library>
     </div>
-    <Search></Search>
+    <Search class="comp"></Search>
   </div>
 </template>
 
@@ -25,3 +25,18 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.room {
+  display: flex;
+  flex-wrap: wrap;
+
+  .comp {
+    flex: 50%;
+  }
+}
+@media screen and (max-width: 992px) {
+  .room {
+    flex-direction: column;
+  }
+}
+</style>

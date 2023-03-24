@@ -94,16 +94,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 header {
-  background-color: #fff;
+  background-color: #12151b;
   padding: 0 25px;
   z-index: 99;
   .link {
     font-weight: 500;
     padding: 0 8px;
     transition: 0.3s color ease;
+    color: rgb(182, 182, 247);
 
     &:hover {
-      color: navy;
+      color: rgb(196, 196, 240);
     }
   }
   nav {
@@ -116,7 +117,7 @@ header {
       .header {
         font-weight: 600;
         font-size: 24px;
-        color: black;
+        color: rgb(168, 167, 230);
         text-decoration: none;
       }
     }
@@ -136,6 +137,12 @@ header {
         .link:last-child {
           margin-right: 0;
         }
+      }
+      .login {
+        background-color: rgb(17, 26, 29);
+        border-radius: 5px;
+        border-color: dimgrey;
+        color: dimgrey;
       }
     }
   }

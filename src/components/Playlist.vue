@@ -3,7 +3,7 @@
     <div class="addvideo">
       <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
-      <input type="button" @click="addTrack" value="Add Video" />
+      <input type="button" @click="addTrack" value="+" />
     </div>
 
     <!-- <ul v-for="(clip, index) in playlist" v-bind:key="clip.name + '_' + index">
@@ -24,16 +24,21 @@
     >
       <template #item="{ element, index }">
         <div class="listelement">
-          <span>{{ element.name }}</span>
-          <input
-            v-if="isLoggedIn"
-            type="button"
-            @click="addToCatalog(element)"
-            value="add"
-          />
-
-          <input type="button" @click="setCurrent(index)" value="play" />
-          <input type="button" @click="removeVideo(index)" value="del" />
+          <span
+            :style="index == currentIndex ? 'font-weight:bold' : ''"
+            class="playlist-element"
+            >{{ element.name }}</span
+          >
+          <span class="playlist-button">
+            <input type="button" @click="setCurrent(index)" value=">" />
+            <input
+              v-if="isLoggedIn"
+              type="button"
+              @click="addToCatalog(element)"
+              value="+"
+            />
+            <input type="button" @click="removeVideo(index)" value="-" />
+          </span>
         </div>
       </template>
     </draggable>
@@ -130,11 +135,12 @@ export default {
   // position: absolute;
   // right: 0;
   // top: 0;
-  // width: 500px;
+  max-width: 500px;
+  max-height: 50vh;
   border-radius: 5%;
   margin: 10px;
 
-  background-color: whitesmoke;
+  background-color: rgb(26, 33, 41);
   overflow: hidden;
 
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -161,19 +167,33 @@ export default {
 
   .listelement {
     list-style: none;
-    background-color: whitesmoke;
+    background-color: rgb(17, 26, 29);
     //margin-left: -15px;
-    margin: 3px 0px 3px 0px;
-    padding-right: 10px;
-    max-width: 550px;
-    clear: right;
-    span {
-      white-space: nowrap;
+    // margin: 3px 0px 3px 0px;
+    // padding-right: 10px;
+    // max-width: 550px;
+    // clear: right;
+    display: flex;
+    align-items: center;
+    // span {
+    //   white-space: nowrap;
+    //   overflow: hidden;
+    // }
+    // input {
+    //   float: right;
+    //   white-space: nowrap;
+    // }
+    .playlist-element {
+      flex: 1;
+      min-width: 0;
       overflow: hidden;
-    }
-    input {
-      float: right;
       white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .playlist-button {
+      white-space: nowrap;
+      display: inline-block;
     }
   }
 }

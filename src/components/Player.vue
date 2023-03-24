@@ -16,15 +16,15 @@
         v-model="currentTime"
         @change="onInputRangeChange"
       />
+      Shared: <input type="checkbox" v-model="shared" /> Volume:
+      <input
+        type="range"
+        min="1"
+        max="100"
+        v-model="hostVolume"
+        @change="volumeChange"
+      />
     </div>
-    Shared: <input type="checkbox" v-model="shared" /> Volume:
-    <input
-      type="range"
-      min="1"
-      max="100"
-      v-model="hostVolume"
-      @change="volumeChange"
-    />
   </div>
 </template>
 <script>

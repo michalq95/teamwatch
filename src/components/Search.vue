@@ -4,27 +4,28 @@
       type="text"
       v-model="searchPhrase"
       placeholder="Search"
+      class="searchbar"
       @keyup.enter="search"
     />
     <input type="button" @click="search" value="Search" />
 
     <div v-if="foundVideos">
-      <ul>
-        <li v-for="(video, index) in foundVideos" :key="index">
-          {{ video.title }}
-          <input
-            type="button"
-            @click="addToPlaylist(video)"
-            value="AddToPlaylist"
-          />
+      <div
+        class="playlist-row"
+        v-for="(video, index) in foundVideos"
+        :key="index"
+      >
+        <span class="playlist-element">{{ video.title }}</span>
+        <span class="playlist-button">
+          <input type="button" @click="addToPlaylist(video)" value=">" />
           <input
             v-if="isLoggedIn"
             type="button"
             @click="addToLibrary(video)"
-            value="AddToLibrary"
+            value="+"
           />
-        </li>
-      </ul>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -97,4 +98,31 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.searchbar {
+  height: 30px;
+  width: 300px;
+  border-radius: 8px;
+  color: rgb(172, 172, 189);
+}
+.playlist-row {
+  list-style: none;
+  background-color: rgb(17, 26, 29);
+  display: flex;
+  align-items: center;
+  width: 600px;
+
+  .playlist-element {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .playlist-button {
+    white-space: nowrap;
+    display: inline-block;
+  }
+}
+</style>

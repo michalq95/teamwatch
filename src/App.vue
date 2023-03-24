@@ -8,7 +8,6 @@
   <!-- <iframe width="420" height="345" v-bind:src="currentClipLink"> </iframe> -->
 </template>
 <script>
-import { mapMutations } from "vuex";
 import Navigation from "./components/Navigation.vue";
 
 export default {
@@ -32,16 +31,26 @@ export default {
 };
 </script>
 <style lang="scss">
+body {
+  background-color: #2c3e50;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #aacbec;
+  background-color: #2c3e50;
+  input {
+    background-color: #172029;
+    color: #aacbec;
+    text-align: center;
+    border-radius: 5px;
+    border-color: #2c3e50;
+  }
 }
-.right {
-  float: right;
-}
+
 nav {
   padding: 30px;
 
