@@ -1,6 +1,7 @@
 const socketio = require("socket.io");
 const io = socketio({ cors: { origin: "*" } });
 const { getRoomByName, createOrJoinRoom, addVideo } = require("./roomStore");
+const axios = require("axios");
 
 io.use(async (socket, next) => {
   socket.username = socket.handshake.auth.username;
@@ -12,7 +13,6 @@ io.on("connection", async (socket) => {
   console.log(`A user connected to room ${socket.room}`);
   socket.join(socket.room);
   const createdRoom = createOrJoinRoom(socket.room);
-  console.log(createdRoom);
   socket.emit("track:switch", createdRoom);
   socket.to(socket.room).emit("newuserconnected", {
     username: socket.username,
@@ -43,14 +43,16 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("track:add", ({ video, videoName, to }) => {
-    let videoLink = video;
-    let room = getRoomByName(to);
-    //should verify if valid youtube video
-    //and name should be also taken from API
-    if (videoLink.length == 11)
-      videoLink = `https://www.youtube.com/watch?v=${videoLink}`;
-    room.playlist.push({ name: videoName, link: videoLink });
-    io.in(to).emit("room", room);
+    if (video) {
+      let videoLink = video;
+      let room = getRoomByName(to);
+      //should verify if valid youtube video
+      //and name should be also taken from API
+      if (videoLink.length == 11)
+        videoLink = `https://www.youtube.com/watch?v=${videoLink}`;
+      room.playlist.push({ name: videoName, link: videoLink });
+      io.in(to).emit("room", room);
+    }
   });
 
   socket.on("volume:change", ({ volume, to }) => {
@@ -67,6 +69,21 @@ io.on("connection", async (socket) => {
       .concat(room.playlist.slice(index + 1));
     socket.emit("room", room);
     socket.to(to).emit("room", room);
+  });
+
+  socket.on("search:youtube", async ({ searchPhrase }) => {
+    const url = `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBEAPI}&q=${searchPhrase}&part=snippet&type=video`;
+
+    try {
+      const res = await axios.get(url);
+      const videos = res.data.items.map((item) => ({
+        id: item.id.videoId,
+        title: item.snippet.title,
+      }));
+      socket.emit("search:youtube", { videos });
+    } catch (e) {
+      console.log(e);
+    }
   });
 });
 
