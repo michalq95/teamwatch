@@ -87,7 +87,7 @@ export default {
     openCloseCatalog(index) {
       if (this.openedCatalogs.includes(index)) {
         this.openedCatalogs = this.openedCatalogs.filter((el) => {
-          el !== index;
+          el != index;
         });
       } else {
         this.openedCatalogs.push(index);
