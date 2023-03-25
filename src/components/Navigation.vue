@@ -2,7 +2,7 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" to="/">Home</router-link>
+        <router-link class="header" to="/">Teamwatcher</router-link>
       </div>
       <div class="nav-links">
         <form @submit.prevent="login" v-if="!isLoggedIn">
@@ -57,7 +57,7 @@ export default {
     },
     async loginMe() {
       if (this.loginData.password && this.loginData.name) {
-        let uri = "http://localhost:5000/api/user/login";
+        let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/login`;
         try {
           const res = await fetch(uri, {
             method: "POST",

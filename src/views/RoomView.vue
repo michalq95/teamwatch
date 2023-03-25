@@ -28,6 +28,7 @@ export default {
 <style lang="scss" scoped>
 .room {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 
   .comp {
@@ -36,7 +37,9 @@ export default {
 }
 @media screen and (max-width: 992px) {
   .room {
+    margin: 30px;
     flex-direction: column;
+    justify-content: center;
   }
 }
 </style>

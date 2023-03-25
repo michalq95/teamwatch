@@ -112,7 +112,7 @@ export default {
       this.library[index].playlist.splice(index2, 1);
     },
     async saveLibrary() {
-      let uri = "http://localhost:5000/api/user/library";
+      let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/library`;
       try {
         const res = await fetch(uri, {
           method: "POST",
@@ -131,7 +131,7 @@ export default {
       }
     },
     async loadLibrary() {
-      let uri = "http://localhost:5000/api/user/library";
+      let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/library`;
       try {
         const res = await fetch(uri, {
           method: "GET",

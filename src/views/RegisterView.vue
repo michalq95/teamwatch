@@ -49,7 +49,7 @@ export default {
         this.registerData.name &&
         this.registerData.email
       ) {
-        let uri = "http://localhost:5000/api/user/register";
+        let uri = `${process.env.VUE_APP_BACKEND_URL}/api/user/register`;
         try {
           const res = await fetch(uri, {
             method: "POST",
