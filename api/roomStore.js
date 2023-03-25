@@ -9,20 +9,8 @@ function createOrJoinRoom(name) {
   if (!room) {
     room = {
       name: name,
-      playlist: [
-        { name: "Muppets", link: "https://www.youtube.com/embed/tgbNymZ7vqY" },
-        { name: "Barbie", link: "https://www.youtube.com/watch?v=qundeyQtsQU" },
-        {
-          name: "Suce",
-          link: "https://www.youtube.com/watch?v=NF5Co7GXvCY",
-        },
-      ],
-      currentVideo: {
-        name: "Muppets",
-        link: "https://www.youtube.com/embed/tgbNymZ7vqY",
-        // index: 0,
-      },
-      // nextVideoIndex: 1,
+      playlist: [],
+      currentVideo: {},
       currentIndex: 0,
     };
     rooms.push(room);
