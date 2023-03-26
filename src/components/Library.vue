@@ -153,7 +153,6 @@ export default {
           body: JSON.stringify(this.library),
         });
         const data = await res.json();
-        console.log(data);
         this.library = data.data;
       } catch (e) {
         console.error(e);
@@ -171,7 +170,6 @@ export default {
           },
         });
         const data = await res.json();
-        console.log(data);
         this.library = data.data;
       } catch (e) {
         console.error(e);

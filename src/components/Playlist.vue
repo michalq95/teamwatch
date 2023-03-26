@@ -151,7 +151,7 @@ export default {
 .list {
   position: relative;
   text-align: left;
-  max-height: 50vh;
+  max-height: 45vh;
   max-width: 490px;
   padding: 2% 2% 10% 2%;
   overflow-y: scroll;

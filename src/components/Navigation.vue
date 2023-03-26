@@ -75,7 +75,6 @@ export default {
               token: data.token,
             });
             localStorage.setItem("user", jsonstring);
-            console.log(jsonstring);
 
             this.$store.commit("setUser", {
               name: data.user.name,
