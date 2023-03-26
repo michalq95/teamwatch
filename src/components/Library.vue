@@ -1,16 +1,16 @@
 <template>
   <div class="library-wrapper">
     Library
-    <input type="button" @click="loadLibrary()" value="load" />
-    <input type="button" @click="saveLibrary()" value="save" />
+    <input type="button" @click="loadLibrary()" value="Load" />
+    <input type="button" @click="saveLibrary()" value="Save" />
     <input
       type="button"
       @click="showNewDir = !showNewDir"
-      value="add Directory"
+      value="Add Directory"
     />
     <span v-if="showNewDir">
-      <input type="text" v-model="newDirName" placeholder="new dir name" />
-      <input type="button" @click="newDir" value="addDir" />
+      <input type="text" v-model="newDirName" placeholder="name" />
+      <input type="button" @click="newDir" value="+" />
     </span>
 
     <div
@@ -22,16 +22,41 @@
       <span
         class="playlist-name"
         :style="index == activeCatalog ? 'font-weight:bold' : ''"
-        >{{ catalog.name }}</span
-      >
-      <input type="button" @click="openCloseCatalog(index)" value="open" />
+        @click="editCatalogName(index)"
+        >{{ editingIndex === index ? "" : catalog.name }}
+        <input
+          id="editingNameLibrary"
+          v-if="editingIndex === index"
+          class="edit-name"
+          v-model="editedName"
+          @keyup.enter="saveEditedCatalogName(index)"
+          @blur="cancelEditingCatalogName"
+      /></span>
+      <input
+        type="button"
+        @click="openCloseCatalog(index)"
+        :value="openedCatalogs.includes(index) ? 'Close' : 'Open'"
+      />
       <div
         class="playlist-row"
         v-if="openedCatalogs.includes(index)"
         v-for="(video, index2) in catalog.playlist"
         :key="index2"
       >
-        <span class="playlist-element">{{ video.name }}</span>
+        <span @click="editVideoName(index, index2)" class="playlist-element"
+          >{{
+            editingVideoIndex == index && editingVideoIndex2 == index2
+              ? ""
+              : video.name
+          }}
+          <input
+            id="editingNameVideo"
+            v-if="editingVideoIndex == index && editingVideoIndex2 == index2"
+            class="edit-name"
+            v-model="editedName"
+            @keyup.enter="saveEditedVideoName(index, index2)"
+            @blur="cancelEditingVideoName"
+        /></span>
         <span class="playlist-button">
           <input type="button" @click="addToPlaylist(video)" value="+" />
           <input
@@ -54,6 +79,10 @@ export default {
       openedCatalogs: [],
       showNewDir: false,
       newDirName: "",
+      editingIndex: null,
+      editingVideoIndex: null,
+      editingVideoIndex2: null,
+      editedName: "",
     };
   },
   computed: {
@@ -148,6 +177,39 @@ export default {
         console.error(e);
       }
     },
+    editCatalogName(index) {
+      this.editingIndex = index;
+      this.editedName = this.library[index].name;
+      this.$nextTick(() => {
+        this.$el.querySelector("#editingNameLibrary").focus();
+      });
+    },
+    saveEditedCatalogName(index) {
+      this.library[index].name = this.editedName;
+      this.cancelEditingCatalogName();
+    },
+    cancelEditingCatalogName() {
+      this.editingIndex = null;
+      this.editedName = "";
+    },
+    editVideoName(index, index2) {
+      this.editingVideoIndex = index;
+      this.editingVideoIndex2 = index2;
+      this.editedName = this.library[index].playlist[index2].name;
+
+      this.$nextTick(() => {
+        this.$el.querySelector("#editingNameVideo").focus();
+      });
+    },
+    saveEditedVideoName(index, index2) {
+      this.library[index].playlist[index2].name = this.editedName;
+      this.cancelEditingVideoName();
+    },
+    cancelEditingVideoName() {
+      this.editingVideoIndex = null;
+      this.editingVideoIndex2 = null;
+      this.editedName = "";
+    },
   },
 };
 </script>
@@ -159,6 +221,11 @@ export default {
     text-align: left;
     max-width: 630px;
 
+    .edit-name {
+      width: 300px;
+      text-align: left;
+    }
+
     .playlist-name {
       background-color: rgb(40, 54, 66);
       border-radius: 5px;
@@ -166,6 +233,8 @@ export default {
     .playlist-row {
       display: flex;
       align-items: center;
+      font-size: small;
+      padding-left: 5px;
 
       .playlist-element {
         flex: 1;

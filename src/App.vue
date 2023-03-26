@@ -45,7 +45,7 @@ body {
   input {
     background-color: #172029;
     color: #aacbec;
-    text-align: center;
+    // text-align: center;
     border-radius: 5px;
     border-color: #2c3e50;
   }

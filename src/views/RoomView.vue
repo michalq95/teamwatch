@@ -29,6 +29,7 @@ export default {
 .room {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 
   .comp {
@@ -37,9 +38,12 @@ export default {
 }
 @media screen and (max-width: 992px) {
   .room {
+    display: flex;
+
     margin: 30px;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 }
 </style>

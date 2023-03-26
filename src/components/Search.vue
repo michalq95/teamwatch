@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search-container">
     <input
       type="text"
       v-model="searchPhrase"
@@ -99,30 +99,38 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.searchbar {
-  height: 30px;
-  width: 300px;
-  border-radius: 8px;
-  color: rgb(172, 172, 189);
-}
-.playlist-row {
-  list-style: none;
-  background-color: rgb(17, 26, 29);
-  display: flex;
-  align-items: center;
+.search-container {
+  // display: flex;
+  // align-items: center;
+  position: relative;
   width: 600px;
 
-  .playlist-element {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .searchbar {
+    height: 30px;
+    width: 300px;
+    border-radius: 8px;
+    color: rgb(172, 172, 189);
   }
 
-  .playlist-button {
-    white-space: nowrap;
-    display: inline-block;
+  .playlist-row {
+    list-style: none;
+    background-color: rgb(17, 26, 29);
+    display: flex;
+    align-items: center;
+    width: 600px;
+
+    .playlist-element {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .playlist-button {
+      white-space: nowrap;
+      display: inline-block;
+    }
   }
 }
 </style>

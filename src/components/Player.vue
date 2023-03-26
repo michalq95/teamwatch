@@ -7,7 +7,7 @@
         @stateChange="onStateChange"
         ref="youtube"
       />
-      Seek:<input
+      <input
         class="seek"
         type="range"
         min="0"

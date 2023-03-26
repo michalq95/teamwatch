@@ -6,14 +6,6 @@
       <input type="button" @click="addTrack" value="+" />
     </div>
 
-    <!-- <ul v-for="(clip, index) in playlist" v-bind:key="clip.name + '_' + index">
-      {{
-        clip.name
-      }}
-      <input type="button" @click="setCurrent(index)" value="play" />
-    </ul> -->
-    <!-- {{ playlist }} -->
-
     <draggable
       class="list"
       v-model="playlist"
@@ -27,6 +19,7 @@
           <span
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
+            @click="setCurrent(index)"
             >{{ element.name }}</span
           >
           <span class="playlist-button">
@@ -138,7 +131,8 @@ export default {
   max-width: 500px;
   max-height: 50vh;
   border-radius: 5%;
-  margin: 10px;
+  margin: 15px;
+  padding-bottom: 20px;
 
   background-color: rgb(26, 33, 41);
   overflow: hidden;
@@ -147,7 +141,7 @@ export default {
 
   .addvideo {
     position: relative;
-    margin: 10px 0px 10px 0px;
+    margin: 10px 10px 0px 0px;
 
     border-radius: 5%;
     border-color: black;
@@ -156,12 +150,10 @@ export default {
 }
 .list {
   position: relative;
-
   text-align: left;
   max-height: 50vh;
   max-width: 490px;
-  padding: 2% 0% 2% 2%;
-
+  padding: 2% 2% 10% 2%;
   overflow-y: scroll;
   overflow-x: hidden;
 
