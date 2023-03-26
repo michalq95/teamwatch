@@ -49,7 +49,7 @@ export default {
         this.registerData.name &&
         this.registerData.email
       ) {
-        let uri = `${process.env.VUE_APP_BACKEND_URL}/api/user/register`;
+        let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/register`;
         try {
           const res = await fetch(uri, {
             method: "POST",
@@ -74,6 +74,7 @@ export default {
               name: data.user.name,
               token: data.token,
             });
+            this.$router.push({ name: "home" });
           }
         } catch (e) {
           this.unsuccesful = true;
