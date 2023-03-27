@@ -124,7 +124,7 @@ export default {
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
       socket.on("blocked", () => {
-        console.log("blocked");
+        // console.log("blocked");
       });
       this.$refs.youtube.playVideo();
       this.updateInterval = setInterval(() => {
@@ -132,7 +132,7 @@ export default {
       }, 1000);
     },
     async onStateChange(value) {
-      console.log(value.data);
+      // console.log(value.data);
       switch (value.data) {
         case 0: //song ended
           await this.$store.commit("incrementCurrentIndex");
