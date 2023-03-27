@@ -42,6 +42,7 @@ export default {
       currentTime: 0,
       maxTime: 0,
       updateInterval: null,
+      paused: true,
     };
   },
   computed: {
@@ -82,10 +83,13 @@ export default {
       });
       socket.on("track:play", () => {
         this.$refs.youtube.playVideo();
+        this.paused = false;
       });
       socket.on("track:pause", () => {
-        if (this.$refs.youtube.getPlayerState() == 1)
+        if (this.$refs.youtube.getPlayerState() == 1) {
           this.$refs.youtube.pauseVideo();
+          this.paused = true;
+        }
       });
       socket.on("room", (data) => {
         this.$store.commit("setStatePlaylist", data.playlist);
@@ -119,12 +123,16 @@ export default {
       socket.on("volume:change", ({ volume }) => {
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
+      socket.on("blocked", () => {
+        console.log("blocked");
+      });
       this.$refs.youtube.playVideo();
       this.updateInterval = setInterval(() => {
         this.currentTime = this.$refs.youtube.getCurrentTime();
       }, 1000);
     },
     async onStateChange(value) {
+      console.log(value.data);
       switch (value.data) {
         case 0: //song ended
           await this.$store.commit("incrementCurrentIndex");
@@ -137,15 +145,14 @@ export default {
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          socket.emit("track:play", { to: this.roomid });
+          if (this.paused) socket.emit("track:play", { to: this.roomid });
+          this.paused = false;
           break;
         case 2: //song paused
-          socket.emit("track:pause", { to: this.roomid });
+          if (!this.paused) socket.emit("track:pause", { to: this.roomid });
+          this.paused = true;
           break;
         case 3: //song buffering
-          if (this.$store.getters.isHost) {
-            socket.emit("track:pause", { to: this.roomid });
-          }
           break;
         case 5: //song seek
           // console.log("emit current position");
