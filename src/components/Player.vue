@@ -20,7 +20,7 @@
       <input
         type="range"
         min="1"
-        max="100"
+        max="99"
         v-model="hostVolume"
         @change="volumeChange"
       />
