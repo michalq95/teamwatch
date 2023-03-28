@@ -9,7 +9,7 @@
     />
     <input type="button" @click="search" value="Search" />
 
-    <div v-if="foundVideos">
+    <div class="foundvideos" v-if="foundVideos">
       <div
         class="playlist-row"
         v-for="(video, index) in foundVideos"
@@ -100,37 +100,48 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-container {
-  // display: flex;
+  //display: flex;
   // align-items: center;
   position: relative;
   width: 600px;
 
+  .foundvideos {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    //margin-left: 25%;
+
+    .playlist-row {
+      list-style: none;
+      background-color: rgb(17, 26, 29);
+      display: flex;
+      float: right;
+      align-items: center;
+      width: 600px;
+
+      .playlist-element {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .playlist-button {
+        white-space: nowrap;
+        display: inline-block;
+      }
+    }
+  }
+
   .searchbar {
+    position: relative;
     height: 30px;
     width: 300px;
     border-radius: 8px;
     color: rgb(172, 172, 189);
-  }
-
-  .playlist-row {
-    list-style: none;
-    background-color: rgb(17, 26, 29);
-    display: flex;
-    align-items: center;
-    width: 600px;
-
-    .playlist-element {
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .playlist-button {
-      white-space: nowrap;
-      display: inline-block;
-    }
+    margin-bottom: 5px;
+    margin-right: 5px;
   }
 }
 </style>

@@ -29,7 +29,7 @@ export default {
 .room {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
 
   .comp {
