@@ -20,10 +20,17 @@
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
             @click="setCurrent(index)"
-            >{{ element.name }}</span
-          >
+            >{{ editingIndex === index ? "" : element.name }}
+            <input
+              id="editingPlaylist"
+              v-if="editingIndex === index"
+              class="edit-name"
+              v-model="editedName"
+              @keyup.enter="saveEditedVideoName(index)"
+              @blur="cancelEditingVideoName"
+          /></span>
           <span class="playlist-button">
-            <input type="button" @click="setCurrent(index)" value=">" />
+            <input type="button" @click="editVideoName(index)" value=".." />
             <input
               v-if="isLoggedIn"
               type="button"
@@ -48,6 +55,8 @@ export default {
     return {
       videoName: "",
       videoRef: "",
+      editingIndex: null,
+      editedName: "",
     };
   },
   computed: {
@@ -104,7 +113,7 @@ export default {
       });
     },
     removeVideo(index) {
-      socket.emit("room", {
+      socket.emit("track:remove", {
         index,
         to: this.roomid,
       });
@@ -119,6 +128,25 @@ export default {
       let lib = this.library;
       lib[this.$store.getters.getActiveCatalog].playlist.push(video);
       this.library = lib;
+    },
+    editVideoName(index) {
+      this.editingIndex = index;
+      this.editedName = this.playlist[index].name;
+      this.$nextTick(() => {
+        this.$el.querySelector("#editingPlaylist").focus();
+      });
+    },
+    saveEditedVideoName(index) {
+      this.playlist[index].name = this.editedName;
+      socket.emit("room", {
+        playlistData: this.$store.getters.playlistData,
+        to: this.roomid,
+      });
+      this.cancelEditingVideoName();
+    },
+    cancelEditingVideoName() {
+      this.editingIndex = null;
+      this.editedName = "";
     },
   },
 };

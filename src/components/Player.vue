@@ -11,16 +11,23 @@
         class="seek"
         type="range"
         min="0"
-        :max="maxTime || 0"
+        :max="maxTime - 0.5 || 0"
         step="1"
         v-model="currentTime"
         @change="onInputRangeChange"
       />
+      <input
+        type="button"
+        style="width: 50px; font-weight: bolder"
+        @click="playPauseVideo"
+        value=">||"
+      />
+      <!-- <input type="button" @click="playVideo" value=">" /> -->
       Shared: <input type="checkbox" v-model="shared" /> Volume:
       <input
         type="range"
         min="1"
-        max="99"
+        max="100"
         v-model="hostVolume"
         @change="volumeChange"
       />
@@ -42,7 +49,8 @@ export default {
       currentTime: 0,
       maxTime: 0,
       updateInterval: null,
-      paused: true,
+      paused: false,
+      recentTrackChange: null,
     };
   },
   computed: {
@@ -73,6 +81,19 @@ export default {
   // },
 
   methods: {
+    playPauseVideo() {
+      try {
+        if (this.paused) {
+          this.$refs.youtube.playVideo();
+          socket.emit("track:play", { to: this.roomid });
+          this.paused = false;
+        } else if (!this.paused) {
+          this.$refs.youtube.pauseVideo();
+          socket.emit("track:pause", { to: this.roomid });
+          this.paused = true;
+        }
+      } catch (e) {}
+    },
     onReady() {
       // this.currentClip = this.currentClipLink;
       // this.currentClip = data.currentVideo;
@@ -88,8 +109,8 @@ export default {
       socket.on("track:pause", () => {
         if (this.$refs.youtube.getPlayerState() == 1) {
           this.$refs.youtube.pauseVideo();
-          this.paused = true;
         }
+        this.paused = true;
       });
       socket.on("room", (data) => {
         this.$store.commit("setStatePlaylist", data.playlist);
@@ -98,6 +119,9 @@ export default {
         // this.currentClip = data.currentVideo;
       });
       socket.on("track:switch", async (data) => {
+        this.recentTrackChange = setTimeout(() => {
+          this.recentTrackChange = null;
+        }, 1000);
         await this.$store.commit("setStatePlaylist", data.playlist);
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
@@ -135,21 +159,23 @@ export default {
       // console.log(value.data);
       switch (value.data) {
         case 0: //song ended
-          await this.$store.commit("incrementCurrentIndex");
-          socket.emit("track:switch", {
-            playlistData: this.$store.getters.playlistData,
-            to: this.roomid,
-          });
+          if (!this.recentTrackChange) {
+            await this.$store.commit("incrementCurrentIndex");
+            socket.emit("track:switch", {
+              playlistData: this.$store.getters.playlistData,
+              to: this.roomid,
+            });
+          }
           // this.currentClip = this.currentClipLink;
 
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          if (this.paused) socket.emit("track:play", { to: this.roomid });
+          // if (this.paused) socket.emit("track:play", { to: this.roomid });
           this.paused = false;
           break;
         case 2: //song paused
-          if (!this.paused) socket.emit("track:pause", { to: this.roomid });
+          // if (!this.paused) socket.emit("track:pause", { to: this.roomid });
           this.paused = true;
           break;
         case 3: //song buffering

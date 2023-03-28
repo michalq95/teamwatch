@@ -163,7 +163,7 @@ export default {
       try {
         const res = await fetch(uri, {
           method: "GET",
-          mode: "cors",
+          // mode: "cors",
           headers: {
             // "Content-Type": "application/json",
             authorization: `Bearer ${this.user.token}`,
