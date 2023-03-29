@@ -145,6 +145,7 @@ export default {
         if (this.shared) this.$refs.youtube.seekTo(seekToTime);
       });
       socket.on("volume:change", ({ volume }) => {
+        this.hostVolume = volume;
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
       socket.on("blocked", () => {

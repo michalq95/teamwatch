@@ -7,7 +7,7 @@
       class="searchbar"
       @keyup.enter="search"
     />
-    <input type="button" @click="search" value="Search" />
+    <input type="button" class="searchbutton" @click="search" value="Search" />
 
     <div class="foundvideos" v-if="foundVideos">
       <div
@@ -138,6 +138,13 @@ export default {
     position: relative;
     height: 30px;
     width: 300px;
+    border-radius: 8px;
+    color: rgb(172, 172, 189);
+    margin-bottom: 5px;
+    margin-right: 5px;
+  }
+  .searchbutton {
+    height: 30px;
     border-radius: 8px;
     color: rgb(172, 172, 189);
     margin-bottom: 5px;

@@ -4,6 +4,11 @@
       <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
       <input type="button" @click="addTrack" value="+" />
+      <input
+        type="button"
+        value="addEntireToLibrary"
+        @click="addEntireToLibrary"
+      />
     </div>
 
     <draggable
@@ -19,7 +24,7 @@
           <span
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
-            @click="setCurrent(index)"
+            @click="editVideoName(index)"
             >{{ editingIndex === index ? "" : element.name }}
             <input
               id="editingPlaylist"
@@ -30,7 +35,7 @@
               @blur="cancelEditingVideoName"
           /></span>
           <span class="playlist-button">
-            <input type="button" @click="editVideoName(index)" value=".." />
+            <input type="button" @click="setCurrent(index)" value=">" />
             <input
               v-if="isLoggedIn"
               type="button"
@@ -148,6 +153,15 @@ export default {
       this.editingIndex = null;
       this.editedName = "";
     },
+    addEntireToLibrary() {
+      var today = new Date();
+      this.library.push({
+        name: `${today.getFullYear()}+-+${
+          today.getMonth() + 1
+        }+-+${today.getDate()}`,
+        playlist: this.playlist,
+      });
+    },
   },
 };
 </script>
@@ -158,7 +172,7 @@ export default {
   // top: 0;
   max-width: 500px;
   max-height: 50vh;
-  border-radius: 5%;
+  border-radius: 7px;
   margin: 15px;
   padding-bottom: 20px;
 
@@ -171,7 +185,7 @@ export default {
     position: relative;
     margin: 10px 10px 0px 0px;
 
-    border-radius: 5%;
+    border-radius: 5px;
     border-color: black;
     border-width: 1px;
   }
@@ -179,7 +193,7 @@ export default {
 .list {
   position: relative;
   text-align: left;
-  max-height: 45vh;
+  max-height: calc(50vh - 30px);
   max-width: 490px;
   padding: 2% 2% 10% 2%;
   overflow-y: scroll;

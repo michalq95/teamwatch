@@ -37,6 +37,7 @@
         @click="openCloseCatalog(index)"
         :value="openedCatalogs.includes(index) ? 'Close' : 'Open'"
       />
+      <input type="button" @click="playAll(index)" value="Play All" />
       <div
         class="playlist-row"
         v-if="openedCatalogs.includes(index)"
@@ -207,6 +208,12 @@ export default {
       this.editingVideoIndex = null;
       this.editingVideoIndex2 = null;
       this.editedName = "";
+    },
+    playAll(index) {
+      socket.emit("tracks:add", {
+        to: this.roomid,
+        videos: this.library[index].playlist,
+      });
     },
   },
 };

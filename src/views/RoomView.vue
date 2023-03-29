@@ -28,7 +28,7 @@ export default {
 <style lang="scss" scoped>
 .room {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: flex-start;
   flex-wrap: wrap;
 
