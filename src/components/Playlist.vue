@@ -156,9 +156,9 @@ export default {
     addEntireToLibrary() {
       var today = new Date();
       this.library.push({
-        name: `${today.getFullYear()}+-+${
+        name: `${today.getFullYear()}-${
           today.getMonth() + 1
-        }+-+${today.getDate()}`,
+        }-${today.getDate()}`,
         playlist: this.playlist,
       });
     },
