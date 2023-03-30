@@ -5,6 +5,7 @@
       <input type="text" v-model="videoName" placeholder="video name" />
       <input type="button" @click="addTrack" value="+" />
       <input
+        v-if="isLoggedIn"
         type="button"
         value="addEntireToLibrary"
         @click="addEntireToLibrary"
@@ -102,7 +103,7 @@ export default {
     addTrack() {
       socket.emit("track:add", {
         video: this.videoRef,
-        videoName: this.videoName,
+        videoName: this.videoName ? this.videoName : "nameless video",
         to: this.roomid,
       });
     },
@@ -142,7 +143,7 @@ export default {
       });
     },
     saveEditedVideoName(index) {
-      this.playlist[index].name = this.editedName;
+      this.playlist[index].name = this.editedName ? this.editedName : "";
       socket.emit("room", {
         playlistData: this.$store.getters.playlistData,
         to: this.roomid,
@@ -170,7 +171,7 @@ export default {
   // position: absolute;
   // right: 0;
   // top: 0;
-  max-width: 500px;
+  max-width: 600px;
   max-height: 50vh;
   border-radius: 7px;
   margin: 15px;
