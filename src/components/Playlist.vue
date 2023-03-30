@@ -7,7 +7,7 @@
       <input
         v-if="isLoggedIn"
         type="button"
-        value="addEntireToLibrary"
+        value="saveAll"
         @click="addEntireToLibrary"
       />
     </div>
