@@ -171,7 +171,7 @@ export default {
   // position: absolute;
   // right: 0;
   // top: 0;
-  max-width: 600px;
+  max-width: 500px;
   max-height: 50vh;
   border-radius: 7px;
   margin: 15px;
