@@ -12,60 +12,63 @@
       <input type="text" v-model="newDirName" placeholder="name" />
       <input type="button" @click="newDir" value="+" />
     </span>
-
-    <div
-      class="library"
-      v-for="(catalog, index) in library"
-      :key="index"
-      @click="activeCatalog = index"
-    >
-      <span
-        class="playlist-name"
-        :style="index == activeCatalog ? 'font-weight:bold' : ''"
-        @click="editCatalogName(index)"
-        >{{ editingIndex === index ? "" : catalog.name }}
-        <input
-          id="editingNameLibrary"
-          v-if="editingIndex === index"
-          class="edit-name"
-          v-model="editedName"
-          @keyup.enter="saveEditedCatalogName(index)"
-          @blur="cancelEditingCatalogName"
-      /></span>
-      <input
-        type="button"
-        @click="openCloseCatalog(index)"
-        :value="openedCatalogs.includes(index) ? 'Close' : 'Open'"
-      />
-      <input type="button" @click="playAll(index)" value="Play All" />
+    <div class="librarycontainer">
       <div
-        class="playlist-row"
-        v-if="openedCatalogs.includes(index)"
-        v-for="(video, index2) in catalog.playlist"
-        :key="index2"
+        class="library"
+        v-for="(catalog, index) in library"
+        :key="index"
+        @click="activeCatalog = index"
       >
-        <span @click="editVideoName(index, index2)" class="playlist-element"
-          >{{
-            editingVideoIndex == index && editingVideoIndex2 == index2
-              ? ""
-              : video.name
-          }}
+        <span
+          class="playlist-name"
+          :style="index == activeCatalog ? 'font-weight:bold' : ''"
+          @click="editCatalogName(index)"
+          >{{ editingIndex === index ? "" : catalog.name }}
           <input
-            id="editingNameVideo"
-            v-if="editingVideoIndex == index && editingVideoIndex2 == index2"
+            id="editingNameLibrary"
+            v-if="editingIndex === index"
             class="edit-name"
             v-model="editedName"
-            @keyup.enter="saveEditedVideoName(index, index2)"
-            @blur="cancelEditingVideoName"
+            @keyup.enter="saveEditedCatalogName(index)"
+            @blur="cancelEditingCatalogName"
         /></span>
-        <span class="playlist-button">
-          <input type="button" @click="addToPlaylist(video)" value="+" />
-          <input
-            type="button"
-            @click="removeFromPlaylist(index, index2)"
-            value="-"
-          />
-        </span>
+        <input
+          type="button"
+          @click="openCloseCatalog(index)"
+          :value="openedCatalogs.includes(index) ? 'Close' : 'Open'"
+        />
+        <input type="button" @click="playAll(index)" value="Play All" />
+        <input type="button" @click="removePlaylist(index)" value="-" />
+        <div
+          class="playlist-row"
+          v-if="openedCatalogs.includes(index)"
+          v-for="(video, index2) in catalog.playlist"
+          :key="index2"
+        >
+          <span @click="editVideoName(index, index2)" class="playlist-element"
+            >{{
+              editingVideoIndex == index && editingVideoIndex2 == index2
+                ? ""
+                : video.name
+            }}
+            <input
+              id="editingNameVideo"
+              v-if="editingVideoIndex == index && editingVideoIndex2 == index2"
+              class="edit-name"
+              v-model="editedName"
+              @keyup.enter="saveEditedVideoName(index, index2)"
+              @blur="cancelEditingVideoName"
+          /></span>
+          <span class="playlist-button">
+            <input type="button" @click="addToPlaylist(video)" value="+" />
+            <input
+              type="button"
+              @click="removeFromPlaylist(index, index2)"
+              value="-"
+            />
+            <!-- <input type="button" @click="removeVideo(index, index2)" value="=" /> -->
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -215,43 +218,57 @@ export default {
         videos: this.library[index].playlist,
       });
     },
+    removePlaylist(index) {
+      this.library = this.library
+        .slice(0, index)
+        .concat(this.library.slice(index + 1));
+    },
+    // removeVideo(index, index2) {
+    //   this.library[index].playlist = this.library[index].playlist
+    //     .slice(0, index2)
+    //     .concat(this.library.slice(index2 + 1));
+    // },
   },
 };
 </script>
 <style lang="scss" scoped>
 .library-wrapper {
   width: 640px;
-  .library {
-    background-color: rgb(24, 27, 37);
-    text-align: left;
-    max-width: 630px;
-
-    .edit-name {
-      width: 300px;
+  .librarycontainer {
+    max-height: 600px;
+    overflow-y: scroll;
+    .library {
+      background-color: rgb(24, 27, 37);
       text-align: left;
-    }
+      max-width: 630px;
 
-    .playlist-name {
-      background-color: rgb(40, 54, 66);
-      border-radius: 5px;
-    }
-    .playlist-row {
-      display: flex;
-      align-items: center;
-      font-size: small;
-      padding-left: 5px;
-
-      .playlist-element {
-        flex: 1;
-        min-width: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      .edit-name {
+        width: 300px;
+        text-align: left;
       }
 
-      .playlist-button {
-        white-space: nowrap;
-        display: inline-block;
+      .playlist-name {
+        background-color: rgb(40, 54, 66);
+        border-radius: 5px;
+      }
+      .playlist-row {
+        display: flex;
+        align-items: center;
+        font-size: small;
+        padding-left: 5px;
+
+        .playlist-element {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .playlist-button {
+          white-space: nowrap;
+          display: inline-block;
+        }
       }
     }
   }

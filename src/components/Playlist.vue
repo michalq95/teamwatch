@@ -26,6 +26,7 @@
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
             @click="editVideoName(index)"
+            @touchstart="editVideoName(index)"
             >{{ editingIndex === index ? "" : element.name }}
             <input
               id="editingPlaylist"
@@ -36,14 +37,25 @@
               @blur="cancelEditingVideoName"
           /></span>
           <span class="playlist-button">
-            <input type="button" @click="setCurrent(index)" value=">" />
+            <input
+              type="button"
+              @click="setCurrent(index)"
+              @touchstart="setCurrent(index)"
+              value=">"
+            />
             <input
               v-if="isLoggedIn"
               type="button"
               @click="addToCatalog(element)"
+              @touchstart="addToCatalog(element)"
               value="+"
             />
-            <input type="button" @click="removeVideo(index)" value="-" />
+            <input
+              type="button"
+              @click="removeVideo(index)"
+              @touchstart="removeVideo(index)"
+              value="-"
+            />
           </span>
         </div>
       </template>

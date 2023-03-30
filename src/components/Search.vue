@@ -8,8 +8,14 @@
       @keyup.enter="search"
     />
     <input type="button" class="searchbutton" @click="search" value="Search" />
-
-    <div class="foundvideos" v-if="foundVideos">
+    <input
+      v-if="foundVideos.length"
+      type="button"
+      class="searchbutton"
+      @click="playAll"
+      value="Play All"
+    />
+    <div class="foundvideos" v-if="foundVideos.length">
       <div
         class="playlist-row"
         v-for="(video, index) in foundVideos"
@@ -46,7 +52,30 @@ export default {
   },
   methods: {
     search() {
-      socket.emit("search:youtube", { searchPhrase: this.searchPhrase });
+      //ale zajebista sciane ifow zrobilem
+      let match;
+      // socket.emit("search:youtube", { searchPhrase: this.searchPhrase });
+      // if (this.searchPhrase.length == 11) {
+
+      //   console.log("possible id");
+      // } else {
+      match = this.searchPhrase.match(/list=([^&]*)/);
+      console.log(match);
+      if (match) {
+        socket.emit("playlist:get", { phrase: match[1] });
+        console.log("playlist");
+      } else {
+        match = this.searchPhrase.match(/v=([a-zA-Z0-9_-]+)&?/);
+        console.log(match);
+        if (match) {
+          socket.emit("video:get", { phrase: match[1] });
+          console.log("normal video");
+        } else {
+          socket.emit("search:youtube", { searchPhrase: this.searchPhrase });
+          console.log("search phrase");
+        }
+      }
+      // }
     },
     addToPlaylist(video) {
       socket.emit("track:add", {
@@ -62,6 +91,15 @@ export default {
         link: `https://www.youtube.com/watch?v=${video.id}`,
       });
       this.library = lib;
+    },
+    playAll() {
+      socket.emit("tracks:add", {
+        to: this.roomid,
+        videos: this.foundVideos.map((el) => ({
+          name: el.title,
+          link: `https://www.youtube.com/watch?v=${el.id}`,
+        })),
+      });
     },
   },
   computed: {
