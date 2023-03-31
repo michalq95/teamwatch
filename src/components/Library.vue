@@ -233,14 +233,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .library-wrapper {
-  width: 640px;
+  padding-left: 10px;
+  max-width: 630px;
+
   .librarycontainer {
+    width: 490px;
+
     max-height: 600px;
     overflow-y: scroll;
     .library {
       background-color: rgb(24, 27, 37);
       text-align: left;
-      max-width: 630px;
 
       .edit-name {
         width: 300px;

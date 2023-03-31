@@ -1,9 +1,9 @@
 <template>
   <div class="playlistcomponent">
     <div class="addvideo">
-      <input type="text" v-model="videoRef" placeholder="link to video" />
+      <!-- <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
-      <input type="button" @click="addTrack" value="+" />
+      <input type="button" @click="addTrack" value="+" /> -->
       <input
         v-if="isLoggedIn"
         type="button"
@@ -183,8 +183,8 @@ export default {
   // position: absolute;
   // right: 0;
   // top: 0;
-  max-width: 500px;
-  max-height: 50vh;
+  // max-width: 500px;
+  // max-height: 50vh;
   border-radius: 7px;
   margin: 15px;
   padding-bottom: 20px;
@@ -206,9 +206,11 @@ export default {
 .list {
   position: relative;
   text-align: left;
-  max-height: calc(50vh - 30px);
-  max-width: 490px;
-  padding: 2% 2% 10% 2%;
+  // max-height: fit-content;
+  // max-height: calc(50vh - 30px);
+  max-height: 415px;
+  // max-width: 490px;
+  padding: 2px 4px 15px 4px;
   overflow-y: scroll;
   overflow-x: hidden;
 

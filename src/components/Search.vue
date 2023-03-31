@@ -42,7 +42,28 @@ export default {
   data() {
     return {
       searchPhrase: "",
-      foundVideos: [],
+      foundVideos: [
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+        { title: "aezakmi" },
+      ],
     };
   },
   mounted() {
@@ -140,6 +161,7 @@ export default {
 .search-container {
   //display: flex;
   // align-items: center;
+  margin-top: 12px;
   position: relative;
   width: 600px;
 

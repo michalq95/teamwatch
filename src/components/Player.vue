@@ -5,6 +5,8 @@
         v-bind:src="currentClip.link"
         @ready="onReady"
         @stateChange="onStateChange"
+        width="720"
+        height="405"
         ref="youtube"
       />
       <input
@@ -205,9 +207,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .player {
-  width: 640px;
+  width: 720px;
 }
 .seek {
-  width: 640px;
+  width: 720px;
 }
 </style>

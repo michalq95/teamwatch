@@ -1,11 +1,11 @@
 <template>
   <div class="room">
-    <Player class="comp"></Player>
-    <Playlist class="comp"></Playlist>
+    <Player class="comp1 comp"></Player>
+    <Playlist class="comp2 comp"></Playlist>
     <div v-if="isLoggedIn">
-      <Library class="comp"></Library>
+      <Library class="comp3 comp"></Library>
     </div>
-    <Search class="comp"></Search>
+    <Search class="comp4 comp"></Search>
   </div>
 </template>
 
@@ -26,17 +26,42 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.room {
-  display: flex;
-  justify-content: left;
-  align-items: flex-start;
-  flex-wrap: wrap;
+@media screen and (min-width: 1122px) {
+  .room {
+    position: relative;
+    // left: 50%;
+    // transform: translateX(-50%);
+    .comp1 {
+      position: absolute;
+      top: 10px;
+      width: 730px;
+      left: calc(90vw - 660px);
+    }
+    .comp2 {
+      position: absolute;
+      height: 440px;
+      width: calc(90vw - 680px);
+    }
+    .comp3 {
+      position: absolute;
+      height: 700px;
+      width: calc(90vw - 720px);
 
-  .comp {
-    flex: 50%;
+      top: 450px;
+    }
+    .comp4 {
+      position: absolute;
+      height: 700px;
+      top: 450px;
+      left: calc(90vw - 570px);
+    }
+    .comp {
+      // flex: 50%;
+      margin: 10px;
+    }
   }
 }
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1121px) {
   .room {
     display: flex;
 
@@ -44,6 +69,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .comp {
+      flex: 50%;
+      width: 90vw;
+    }
   }
 }
 </style>

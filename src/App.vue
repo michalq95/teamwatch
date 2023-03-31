@@ -32,6 +32,7 @@ export default {
 </script>
 <style lang="scss">
 body {
+  margin: 0;
   background-color: #2c3e50;
 }
 
