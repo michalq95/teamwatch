@@ -45,15 +45,17 @@ export default {
     .comp3 {
       position: absolute;
       height: 700px;
-      width: calc(90vw - 720px);
+      width: 45vw;
 
-      top: 450px;
+      top: 490px;
     }
     .comp4 {
       position: absolute;
       height: 700px;
-      top: 450px;
-      left: calc(90vw - 570px);
+      top: 490px;
+      width: 45vw;
+
+      left: 45vw;
     }
     .comp {
       // flex: 50%;

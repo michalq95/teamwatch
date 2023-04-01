@@ -36,14 +36,16 @@
               @keyup.enter="saveEditedVideoName(index)"
               @blur="cancelEditingVideoName"
           /></span>
-          <span class="playlist-button">
+          <span class="playlist-buttons">
             <input
+              class="playlist-button"
               type="button"
               @click="setCurrent(index)"
               @touchstart="setCurrent(index)"
               value=">"
             />
             <input
+              class="playlist-button"
               v-if="isLoggedIn"
               type="button"
               @click="addToCatalog(element)"
@@ -51,6 +53,7 @@
               value="+"
             />
             <input
+              class="playlist-button"
               type="button"
               @click="removeVideo(index)"
               @touchstart="removeVideo(index)"
@@ -204,34 +207,28 @@ export default {
   }
 }
 .list {
+  border: 2 solid white;
+  padding: 2px;
   position: relative;
   text-align: left;
   // max-height: fit-content;
   // max-height: calc(50vh - 30px);
-  max-height: 415px;
+  height: 410px;
   // max-width: 490px;
   padding: 2px 4px 15px 4px;
   overflow-y: scroll;
   overflow-x: hidden;
 
   .listelement {
+    border: 2px dotted rgb(168, 167, 230);
+    border-radius: 8px;
+    margin-bottom: -2px;
+    padding-left: 5px;
     list-style: none;
     background-color: rgb(17, 26, 29);
-    //margin-left: -15px;
-    // margin: 3px 0px 3px 0px;
-    // padding-right: 10px;
-    // max-width: 550px;
-    // clear: right;
     display: flex;
     align-items: center;
-    // span {
-    //   white-space: nowrap;
-    //   overflow: hidden;
-    // }
-    // input {
-    //   float: right;
-    //   white-space: nowrap;
-    // }
+
     .playlist-element {
       flex: 1;
       min-width: 0;
@@ -240,9 +237,14 @@ export default {
       text-overflow: ellipsis;
     }
 
-    .playlist-button {
+    .playlist-buttons {
       white-space: nowrap;
       display: inline-block;
+      .playlist-button {
+        padding: 5px;
+        font-size: large;
+        margin-right: 2px;
+      }
     }
   }
 }

@@ -62,6 +62,9 @@ export default {
     roomid() {
       return this.$route.params.roomid;
     },
+    user() {
+      return this.$store.getters.getUser;
+    },
   },
   async mounted() {
     // this.currentClip = this.currentClipLink;
@@ -99,7 +102,11 @@ export default {
     onReady() {
       // this.currentClip = this.currentClipLink;
       // this.currentClip = data.currentVideo;
-      socket.auth = { room: this.roomid };
+      socket.auth = {
+        room: this.roomid,
+        token: this.user.token,
+        name: this.user.name,
+      };
       socket.connect();
       socket.on("newuserconnected", ({ username }) => {
         console.log(`user ${username} connected to room ${this.roomid}`);

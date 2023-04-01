@@ -42,7 +42,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #aacbec;
-  background-color: #2c3e50;
+  background-color: rgb(43, 61, 79);
   input {
     background-color: #172029;
     color: #aacbec;

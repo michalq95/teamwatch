@@ -14,15 +14,15 @@
     </span>
     <div class="librarycontainer">
       <div
-        class="library"
+        class="library playlist-row"
         v-for="(catalog, index) in library"
         :key="index"
         @click="activeCatalog = index"
       >
         <span
-          class="playlist-name"
+          class="playlist-name playlist-element"
           :style="index == activeCatalog ? 'font-weight:bold' : ''"
-          @click="editCatalogName(index)"
+          @click="openCloseCatalog(index)"
           >{{ editingIndex === index ? "" : catalog.name }}
           <input
             id="editingNameLibrary"
@@ -32,13 +32,26 @@
             @keyup.enter="saveEditedCatalogName(index)"
             @blur="cancelEditingCatalogName"
         /></span>
-        <input
-          type="button"
-          @click="openCloseCatalog(index)"
-          :value="openedCatalogs.includes(index) ? 'Close' : 'Open'"
-        />
-        <input type="button" @click="playAll(index)" value="Play All" />
-        <input type="button" @click="removePlaylist(index)" value="-" />
+        <span>
+          <input
+            type="button"
+            @click="editCatalogName(index)"
+            value=".."
+            class="playlist-button"
+          />
+          <input
+            type="button"
+            @click="playAll(index)"
+            value="Play All"
+            class="playlist-button"
+          />
+          <input
+            type="button"
+            @click="removePlaylist(index)"
+            value="-"
+            class="playlist-button"
+          />
+        </span>
         <div
           class="playlist-row"
           v-if="openedCatalogs.includes(index)"
@@ -59,12 +72,18 @@
               @keyup.enter="saveEditedVideoName(index, index2)"
               @blur="cancelEditingVideoName"
           /></span>
-          <span class="playlist-button">
-            <input type="button" @click="addToPlaylist(video)" value="+" />
+          <span class="playlist-buttons">
+            <input
+              type="button"
+              @click="addToPlaylist(video)"
+              value="+"
+              class="playlist-button"
+            />
             <input
               type="button"
               @click="removeFromPlaylist(index, index2)"
               value="-"
+              class="playlist-button"
             />
             <!-- <input type="button" @click="removeVideo(index, index2)" value="=" /> -->
           </span>
@@ -234,16 +253,19 @@ export default {
 <style lang="scss" scoped>
 .library-wrapper {
   padding-left: 10px;
-  max-width: 630px;
+  // max-width: 630px;
 
   .librarycontainer {
-    width: 490px;
+    // width: 490px;
 
     max-height: 600px;
     overflow-y: scroll;
     .library {
-      background-color: rgb(24, 27, 37);
+      background-color: rgb(17, 26, 29);
       text-align: left;
+      border-radius: 3px;
+      border: 1px dotted rgb(168, 167, 230);
+      margin-bottom: -2px;
 
       .edit-name {
         width: 300px;
@@ -251,14 +273,20 @@ export default {
       }
 
       .playlist-name {
+        padding: 4px;
         background-color: rgb(40, 54, 66);
         border-radius: 5px;
+        margin-right: 2px;
+      }
+      .playlist-button {
+        padding: 3px 6px;
       }
       .playlist-row {
         display: flex;
         align-items: center;
         font-size: small;
         padding-left: 5px;
+        border-bottom: 1px solid rgb(43, 61, 79);
 
         .playlist-element {
           flex: 1;
@@ -268,7 +296,7 @@ export default {
           text-overflow: ellipsis;
         }
 
-        .playlist-button {
+        .playlist-buttons {
           white-space: nowrap;
           display: inline-block;
         }

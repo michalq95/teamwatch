@@ -22,13 +22,19 @@
         :key="index"
       >
         <span class="playlist-element">{{ video.title }}</span>
-        <span class="playlist-button">
-          <input type="button" @click="addToPlaylist(video)" value=">" />
+        <span class="playlist-buttons">
+          <input
+            type="button"
+            @click="addToPlaylist(video)"
+            value=">"
+            class="playlist-button"
+          />
           <input
             v-if="isLoggedIn"
             type="button"
             @click="addToLibrary(video)"
             value="+"
+            class="playlist-button"
           />
         </span>
       </div>
@@ -163,12 +169,14 @@ export default {
   // align-items: center;
   margin-top: 12px;
   position: relative;
-  width: 600px;
+  // width: 600px;
 
   .foundvideos {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    overflow-y: scroll;
+
     //margin-left: 25%;
 
     .playlist-row {
@@ -177,7 +185,7 @@ export default {
       display: flex;
       float: right;
       align-items: center;
-      width: 600px;
+      width: 650px;
 
       .playlist-element {
         flex: 1;
@@ -187,9 +195,12 @@ export default {
         text-overflow: ellipsis;
       }
 
-      .playlist-button {
+      .playlist-buttons {
         white-space: nowrap;
         display: inline-block;
+        .playlist-button {
+          padding: 3px 6px;
+        }
       }
     }
   }
