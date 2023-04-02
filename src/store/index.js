@@ -45,6 +45,9 @@ export default createStore({
     getActiveCatalog(state) {
       return state.activeCatalog;
     },
+    getCurrentVideo(state) {
+      return state.currentVideo;
+    },
   },
   mutations: {
     setUser(state, user) {

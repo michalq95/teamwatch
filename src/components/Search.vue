@@ -21,11 +21,17 @@
         v-for="(video, index) in foundVideos"
         :key="index"
       >
-        <span class="playlist-element">{{ video.title }}</span>
+        <span
+          class="playlist-element"
+          @click="addToPlaylist(video)"
+          @touchstart="addToPlaylist(video)"
+          >{{ video.title }}</span
+        >
         <span class="playlist-buttons">
           <input
             type="button"
             @click="addToPlaylist(video)"
+            @touchstart="addToPlaylist(video)"
             value=">"
             class="playlist-button"
           />
@@ -33,6 +39,7 @@
             v-if="isLoggedIn"
             type="button"
             @click="addToLibrary(video)"
+            @touchstart="addToLibrary(video)"
             value="+"
             class="playlist-button"
           />
@@ -48,28 +55,7 @@ export default {
   data() {
     return {
       searchPhrase: "",
-      foundVideos: [
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-        { title: "aezakmi" },
-      ],
+      foundVideos: [],
     };
   },
   mounted() {
@@ -79,30 +65,18 @@ export default {
   },
   methods: {
     search() {
-      //ale zajebista sciane ifow zrobilem
       let match;
-      // socket.emit("search:youtube", { searchPhrase: this.searchPhrase });
-      // if (this.searchPhrase.length == 11) {
-
-      //   console.log("possible id");
-      // } else {
       match = this.searchPhrase.match(/list=([^&]*)/);
-      console.log(match);
       if (match) {
         socket.emit("playlist:get", { phrase: match[1] });
-        console.log("playlist");
       } else {
         match = this.searchPhrase.match(/v=([a-zA-Z0-9_-]+)&?/);
-        console.log(match);
         if (match) {
           socket.emit("video:get", { phrase: match[1] });
-          console.log("normal video");
         } else {
           socket.emit("search:youtube", { searchPhrase: this.searchPhrase });
-          console.log("search phrase");
         }
       }
-      // }
     },
     addToPlaylist(video) {
       socket.emit("track:add", {
@@ -163,27 +137,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-container {
-  //display: flex;
-  // align-items: center;
   margin-top: 12px;
   position: relative;
-  // width: 600px;
-
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(26, 33, 41);
   .foundvideos {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
     overflow-y: scroll;
-
-    //margin-left: 25%;
+    overflow-x: hidden;
+    max-height: 650px;
 
     .playlist-row {
       list-style: none;
       background-color: rgb(17, 26, 29);
       display: flex;
-      float: right;
       align-items: center;
-      width: 650px;
 
       .playlist-element {
         flex: 1;
