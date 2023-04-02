@@ -27,9 +27,7 @@
             class="playlist-element"
             @click="setCurrent(index)"
             @touchstart="setCurrent(index)"
-            >{{
-              editingIndex === index ? "" : `${element.idIndex}${element.name}`
-            }}
+            >{{ editingIndex === index ? "" : `${element.name}` }}
             <input
               id="editingPlaylist"
               v-if="editingIndex === index"
