@@ -106,9 +106,8 @@ export default {
     },
     addToPlaylist(video) {
       socket.emit("track:add", {
-        video: `https://www.youtube.com/watch?v=${video.id}`,
-        videoName: video.title,
-        to: this.roomid,
+        link: `https://www.youtube.com/watch?v=${video.id}`,
+        name: video.title,
       });
     },
     addToLibrary(video) {
@@ -121,7 +120,6 @@ export default {
     },
     playAll() {
       socket.emit("tracks:add", {
-        to: this.roomid,
         videos: this.foundVideos.map((el) => ({
           name: el.title,
           link: `https://www.youtube.com/watch?v=${el.id}`,

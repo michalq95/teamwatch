@@ -90,11 +90,11 @@ export default {
       try {
         if (this.paused) {
           this.$refs.youtube.playVideo();
-          socket.emit("track:play", { to: this.roomid });
+          socket.emit("track:play");
           this.paused = false;
         } else if (!this.paused) {
           this.$refs.youtube.pauseVideo();
-          socket.emit("track:pause", { to: this.roomid });
+          socket.emit("track:pause");
           this.paused = true;
         }
       } catch (e) {}
@@ -170,10 +170,10 @@ export default {
       switch (value.data) {
         case 0: //song ended
           if (!this.recentTrackChange) {
+            // socket.emit("track:next")
             await this.$store.commit("incrementCurrentIndex");
             socket.emit("track:switch", {
               playlistData: this.$store.getters.playlistData,
-              to: this.roomid,
             });
           }
           // this.currentClip = this.currentClipLink;
@@ -181,11 +181,11 @@ export default {
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          // if (this.paused) socket.emit("track:play", { to: this.roomid });
+          // if (this.paused) socket.emit("track:play");
           this.paused = false;
           break;
         case 2: //song paused
-          // if (!this.paused) socket.emit("track:pause", { to: this.roomid });
+          // if (!this.paused) socket.emit("track:pause");
           this.paused = true;
           break;
         case 3: //song buffering
@@ -193,21 +193,20 @@ export default {
         case 5: //song seek
           // console.log("emit current position");
           //dupa nie dziala, to nie to
-          // socket.emit("track:cue", { to: this.roomid });
+          // socket.emit("track:cue");
           break;
       }
     },
     volumeChange() {
       socket.emit("volume:change", {
         volume: this.hostVolume,
-        to: this.roomid,
       });
       if (this.shared) this.$refs.youtube.setVolume(this.hostVolume);
     },
     onInputRangeChange(event) {
       const seekToTime = Number(event.target.value);
       this.$refs.youtube.seekTo(seekToTime);
-      socket.emit("track:seek", { to: this.roomid, seekToTime });
+      socket.emit("track:seek", { seekToTime });
     },
   },
 };
