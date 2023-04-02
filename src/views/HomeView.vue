@@ -1,7 +1,18 @@
 <template>
-  <input type="text" v-model="roomName" />
-  <input type="button" value="Join/Create room" @click="navigateToRoom" />
-  <input type="text" v-model="username" />
+  <h3>
+    Room:
+    <input class="textinput" type="text" v-model="roomName" />
+  </h3>
+  <h3 v-if="!isLoggedIn">
+    Username:
+    <input class="textinput" type="text" v-model="username" />
+  </h3>
+  <input
+    class="button"
+    type="button"
+    value="Join the Room"
+    @click="navigateToRoom"
+  />
 </template>
 <script>
 export default {
@@ -41,3 +52,19 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.textinput {
+  height: 30px;
+  width: 300px;
+  border-radius: 8px;
+  color: rgb(172, 172, 189);
+}
+.button {
+  height: 30px;
+  border-radius: 8px;
+  color: rgb(172, 172, 189);
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-weight: 700;
+}
+</style>
