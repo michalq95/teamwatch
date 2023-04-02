@@ -52,7 +52,7 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 div {
   font-size: large;
   font-weight: 800;
