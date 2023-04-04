@@ -1,6 +1,7 @@
 <template>
   <header>
     <nav class="container">
+      {{ api }}
       <div class="branding">
         <router-link class="header" to="/">Teamwatcher</router-link>
       </div>
@@ -41,6 +42,7 @@ export default {
     return {
       loginData: {},
       unsuccesful: false,
+      api: "",
     };
   },
   computed: {
@@ -50,6 +52,9 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+  },
+  mounted() {
+    this.api = process.env.VUE_APP_BACKEND_URL;
   },
   methods: {
     ...mapMutations(["logOut"]),
@@ -61,19 +66,20 @@ export default {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/login`;
         // console.log(uri);
         try {
-          // const res = await fetch(uri, {
-          //   method: "POST",
-          //   mode: "cors",
-          //   headers: {
-          //     Accept: "application/json, text/plain, */*",
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(this.loginData),
-          // });
+          const res = await fetch(uri, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.loginData),
+          });
 
-          // const data = await res.json();
-          const res = await axios.post(uri, this.loginData);
-          const data = res.data;
+          const data = await res.json();
+          // const res = await axios.post(uri, this.loginData);
+          // console.log(res);
+          // const data = res.data;
           console.log(data);
           if (data) {
             let jsonstring = JSON.stringify({
