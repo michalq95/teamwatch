@@ -55,7 +55,7 @@ export default {
             method: "POST",
             mode: "cors",
             headers: {
-              // Accept: "application/json",
+              // Accept: "application/json, text/plain, */*",
               "Content-Type": "application/json",
             },
             body: JSON.stringify(this.registerData),
