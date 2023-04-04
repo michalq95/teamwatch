@@ -96,6 +96,7 @@
 </template>
 <script>
 import socket from "../socket";
+import axios from "axios";
 
 export default {
   name: "Library",
