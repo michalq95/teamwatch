@@ -53,8 +53,17 @@ export default {
       return this.$store.getters.getUser;
     },
   },
-  mounted() {
+  async mounted() {
     this.api = process.env.VUE_APP_BACKEND_URL;
+    let uri = `${process.env.VUE_APP_BACKEND_URL}`;
+    try {
+      const res = await fetch(uri, {
+        method: "GET",
+      });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
   },
   methods: {
     ...mapMutations(["logOut"]),
