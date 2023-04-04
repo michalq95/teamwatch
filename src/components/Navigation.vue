@@ -74,6 +74,7 @@ export default {
           // const data = await res.json();
           const res = await axios.post(uri, this.loginData);
           const data = res.data;
+          console.log(data);
           if (data) {
             let jsonstring = JSON.stringify({
               name: data.user.name,
