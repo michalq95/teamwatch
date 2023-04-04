@@ -58,6 +58,7 @@ export default {
     async loginMe() {
       if (this.loginData.password && this.loginData.name) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/login`;
+        console.log(uri);
         try {
           const res = await fetch(uri, {
             method: "POST",
@@ -80,7 +81,7 @@ export default {
               name: data.user.name,
               token: data.token,
             });
-            this.$store.commit("setLibrary", data.user.playlists);
+            // this.$store.commit("setLibrary", data.user.playlists);
           }
         } catch (e) {
           this.unsuccesful = true;
