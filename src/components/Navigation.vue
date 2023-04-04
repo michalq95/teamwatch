@@ -33,6 +33,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
+import axios from "axios";
 
 export default {
   name: "Navigation",
@@ -58,20 +59,24 @@ export default {
     async loginMe() {
       if (this.loginData.password && this.loginData.name) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/login`;
-        console.log(uri);
+        // console.log(uri);
         try {
-          const res = await fetch(uri, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              Accept: "application/json, text/plain, */*",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.loginData),
-          });
+          // const res = await fetch(uri, {
+          //   method: "POST",
+          //   mode: "cors",
+          //   headers: {
+          //     Accept: "application/json, text/plain, */*",
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(this.loginData),
+          // });
 
-          const data = await res.json();
-          if (data.success) {
+          // const data = await res.json();
+          const res = await axios.post(uri, this.loginData);
+          const data = res.data;
+          console.log(data);
+          if (data) {
+            console.log("succ");
             let jsonstring = JSON.stringify({
               name: data.user.name,
               token: data.token,
@@ -82,7 +87,7 @@ export default {
               name: data.user.name,
               token: data.token,
             });
-            // this.$store.commit("setLibrary", data.user.playlists);
+            this.$store.commit("setLibrary", data.user.playlists);
           }
         } catch (e) {
           this.unsuccesful = true;
