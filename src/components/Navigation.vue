@@ -1,7 +1,6 @@
 <template>
   <header>
     <nav class="container">
-      {{ api }}
       <div class="branding">
         <router-link class="header" to="/">Teamwatcher</router-link>
       </div>
@@ -42,7 +41,6 @@ export default {
     return {
       loginData: {},
       unsuccesful: false,
-      api: "",
     };
   },
   computed: {
@@ -54,7 +52,6 @@ export default {
     },
   },
   async mounted() {
-    this.api = process.env.VUE_APP_BACKEND_URL;
     let uri = `${process.env.VUE_APP_BACKEND_URL}`;
     try {
       const res = await fetch(uri, {
