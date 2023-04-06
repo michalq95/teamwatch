@@ -52,7 +52,6 @@ export default {
       maxTime: 0,
       updateInterval: null,
       paused: false,
-      recentTrackChange: null,
     };
   },
   computed: {
@@ -124,9 +123,6 @@ export default {
         // this.currentClip = data.currentVideo;
       });
       socket.on("track:switch", async (data) => {
-        this.recentTrackChange = setTimeout(() => {
-          this.recentTrackChange = null;
-        }, 1000);
         await this.$store.commit("setStatePlaylist", data.playlist);
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
@@ -165,15 +161,16 @@ export default {
       // console.log(value.data);
       switch (value.data) {
         case 0: //song ended
-          if (!this.recentTrackChange) {
-            socket.emit("track:next", {
-              currentIdIndex: this.currentClip.idIndex,
-            });
-            // await this.$store.commit("incrementCurrentIndex");
-            // socket.emit("track:switch", {
-            // playlistData: this.$store.getters.playlistData,
-            // });
-          }
+          console.log(this.currentClip);
+          console.log(this.currentClip.idIndex);
+          socket.emit("track:next", {
+            currentIdIndex: this.currentClip.idIndex,
+          });
+          // await this.$store.commit("incrementCurrentIndex");
+          // socket.emit("track:switch", {
+          // playlistData: this.$store.getters.playlistData,
+          // });
+          // }
           // this.currentClip = this.currentClipLink;
 
           break;
