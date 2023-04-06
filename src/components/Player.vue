@@ -122,6 +122,7 @@ export default {
         this.paused = true;
       });
       socket.on("room", (data) => {
+        console.log(data);
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
         // this.$store.commit("setCurrentVideo", data.currentVideo);
