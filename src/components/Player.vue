@@ -66,15 +66,10 @@ export default {
       return this.$store.getters.getUser;
     },
   },
-  async mounted() {
-    // this.currentClip = this.currentClipLink;
-  },
+
   beforeUnmount() {
     try {
       clearInterval(this.updateInterval);
-      // this.$refs.youtube.stopVideo();
-      // this.$refs.youtube.destroy;
-      // this.$refs.youtube = null;
       socket.disconnect();
     } catch (e) {
       console.error(e);
@@ -171,7 +166,9 @@ export default {
       switch (value.data) {
         case 0: //song ended
           if (!this.recentTrackChange) {
-            socket.emit("track:next");
+            socket.emit("track:next", {
+              currentIdIndex: this.currentClip.idIndex,
+            });
             // await this.$store.commit("incrementCurrentIndex");
             // socket.emit("track:switch", {
             // playlistData: this.$store.getters.playlistData,
