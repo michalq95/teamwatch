@@ -167,24 +167,17 @@ export default {
     async saveLibrary() {
       let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/library`;
       try {
-        // const res = await fetch(uri, {
-        //   method: "POST",
-        //   mode: "cors",
-        //   headers: {
-        //     Accept: "application/json, text/plain, */*",
-        //     "Content-Type": "application/json",
-        //     authorization: `Bearer ${this.user.token}`,
-        //   },
-        //   body: JSON.stringify(this.library),
-        // });
-        // const data = await res.json();
-        const res = await axios.post(uri, this.library, {
+        const res = await fetch(uri, {
+          method: "POST",
+          mode: "cors",
           headers: {
-            Authorization: `Bearer ${this.user.token}`,
+            Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
+            authorization: `Bearer ${this.user.token}`,
           },
+          body: JSON.stringify(this.library),
         });
-        const data = res.data;
+        const data = await res.json();
         this.library = data.data;
       } catch (e) {
         console.error(e);
@@ -193,25 +186,16 @@ export default {
     async loadLibrary() {
       let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/library`;
       try {
-        // const res = await fetch(uri, {
-        //   method: "GET",
-        //   // mode: "cors",
-        //   headers: {
-        //     Accept: "application/json, text/plain, */*",
-        //     // "Content-Type": "application/json",
-        //     authorization: `Bearer ${this.user.token}`,
-        //   },
-        // });
-        // const data = await res.json();
-        const res = await axios.get(uri, {
+        const res = await fetch(uri, {
+          method: "GET",
+          // mode: "cors",
           headers: {
-            Authorization: `Bearer ${this.user.token}`,
-            "Content-Type": "application/json",
+            Accept: "application/json, text/plain, */*",
+            // "Content-Type": "application/json",
+            authorization: `Bearer ${this.user.token}`,
           },
         });
-
-        const data = res.data;
-        console.log(data);
+        const data = await res.json();
         this.library = data.data;
       } catch (e) {
         console.error(e);

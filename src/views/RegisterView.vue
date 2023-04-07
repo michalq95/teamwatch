@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -53,19 +51,17 @@ export default {
       ) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/register`;
         try {
-          // const res = await fetch(uri, {
-          //   method: "POST",
-          //   mode: "cors",
-          //   headers: {
-          //     // Accept: "application/json, text/plain, */*",
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(this.registerData),
-          // });
+          const res = await fetch(uri, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              // Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.registerData),
+          });
 
-          // const data = await res.json();
-          const res = await axios.post(uri, this.loginData);
-          const data = res.data;
+          const data = await res.json();
           if (data.success) {
             let jsonstring = JSON.stringify({
               name: data.user.name,
