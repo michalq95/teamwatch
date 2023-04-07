@@ -170,11 +170,11 @@ export default {
       switch (value.data) {
         case 0: //song ended
           if (!this.recentTrackChange) {
-            socket.emit("track:next");
-            // await this.$store.commit("incrementCurrentIndex");
-            // socket.emit("track:switch", {
-            // playlistData: this.$store.getters.playlistData,
-            // });
+            // socket.emit("track:next")
+            await this.$store.commit("incrementCurrentIndex");
+            socket.emit("track:switch", {
+              playlistData: this.$store.getters.playlistData,
+            });
           }
           // this.currentClip = this.currentClipLink;
 

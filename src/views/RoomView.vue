@@ -44,18 +44,18 @@ export default {
     }
     .comp3 {
       position: absolute;
-      max-height: 700px;
+      height: 700px;
       width: 45vw;
 
       top: 490px;
     }
     .comp4 {
       position: absolute;
-      max-height: 700px;
+      height: 700px;
       top: 490px;
       width: 45vw;
 
-      left: 50vw;
+      left: 45vw;
     }
     .comp {
       // flex: 50%;
@@ -75,9 +75,6 @@ export default {
     .comp {
       flex: 50%;
       width: 90vw;
-    }
-    .comp2 {
-      max-height: 440px;
     }
   }
 }
