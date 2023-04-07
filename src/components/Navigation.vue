@@ -57,6 +57,7 @@ export default {
       const res = await fetch(uri, {
         method: "GET",
       });
+      console.log(res);
     } catch (e) {
       console.error(e);
     }
@@ -85,6 +86,7 @@ export default {
           // const res = await axios.post(uri, this.loginData);
           // console.log(res);
           // const data = res.data;
+          console.log(data);
           if (data) {
             let jsonstring = JSON.stringify({
               name: data.user.name,

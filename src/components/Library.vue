@@ -212,6 +212,7 @@ export default {
         });
 
         const data = res.data;
+        console.log(data);
         this.library = data.data;
       } catch (e) {
         console.error(e);
