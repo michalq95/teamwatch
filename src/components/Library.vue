@@ -158,8 +158,9 @@ export default {
     },
     addToPlaylist(video) {
       socket.emit("track:add", {
-        link: video.link,
-        name: video.name,
+        video: video.link,
+        videoName: video.name,
+        to: this.roomid,
       });
     },
     removeFromPlaylist(index, index2) {
@@ -252,6 +253,7 @@ export default {
     },
     playAll(index) {
       socket.emit("tracks:add", {
+        to: this.roomid,
         videos: this.library[index].playlist,
       });
     },
