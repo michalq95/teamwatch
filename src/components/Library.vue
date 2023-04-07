@@ -171,7 +171,7 @@ export default {
           method: "POST",
           mode: "cors",
           headers: {
-            Accept: "application/json, text/plain, */*",
+            // Accept: "application/json",
             "Content-Type": "application/json",
             authorization: `Bearer ${this.user.token}`,
           },
@@ -190,7 +190,7 @@ export default {
           method: "GET",
           // mode: "cors",
           headers: {
-            Accept: "application/json, text/plain, */*",
+            // Accept: "application/json",
             // "Content-Type": "application/json",
             authorization: `Bearer ${this.user.token}`,
           },
