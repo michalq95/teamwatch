@@ -25,9 +25,9 @@
           <span
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
-            @click="editVideoName(index)"
-            @touchstart="editVideoName(index)"
-            >{{ editingIndex === index ? "" : element.name }}
+            @click="setCurrent(index)"
+            @touchstart="setCurrent(index)"
+            >{{ editingIndex === index ? "" : `${element.name}` }}
             <input
               id="editingPlaylist"
               v-if="editingIndex === index"
@@ -115,14 +115,12 @@ export default {
       this.$store.commit("setIndex", index);
       socket.emit("track:switch", {
         playlistData: this.$store.getters.playlistData,
-        to: this.roomid,
       });
     },
     addTrack() {
       socket.emit("track:add", {
-        video: this.videoRef,
-        videoName: this.videoName ? this.videoName : "nameless video",
-        to: this.roomid,
+        link: this.videoRef,
+        name: this.videoName ? this.videoName : "nameless video",
       });
     },
     playlistReorder() {
@@ -132,13 +130,11 @@ export default {
       );
       socket.emit("track:switch", {
         playlistData: this.$store.getters.playlistData,
-        to: this.roomid,
       });
     },
     removeVideo(index) {
       socket.emit("track:remove", {
         index,
-        to: this.roomid,
       });
     },
     addToCatalog(video) {
@@ -157,7 +153,6 @@ export default {
       this.playlist[index].name = this.editedName ? this.editedName : "";
       socket.emit("room", {
         playlistData: this.$store.getters.playlistData,
-        to: this.roomid,
       });
       this.cancelEditingVideoName();
     },
