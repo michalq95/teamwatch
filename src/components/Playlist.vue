@@ -25,8 +25,8 @@
           <span
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
-            @click="editVideoName(index)"
-            @touchstart="editVideoName(index)"
+            @click="setCurrent(index)"
+            @touchstart="setCurrent(index)"
             >{{
               editingIndex === index ? "" : `${element.idIndex}${element.name}`
             }}
@@ -42,9 +42,9 @@
             <input
               class="playlist-button"
               type="button"
-              @click="setCurrent(index)"
-              @touchstart="setCurrent(index)"
-              value=">"
+              @click="editVideoName(index)"
+              @touchstart="editVideoName(index)"
+              value=".."
             />
             <input
               class="playlist-button"
@@ -99,6 +99,9 @@ export default {
         this.$store.commit("setLibrary", value);
       },
     },
+    currentVideo() {
+      return this.$store.getters.getCurrentVideo;
+    },
     roomid() {
       return this.$route.params.roomid;
     },
@@ -122,12 +125,11 @@ export default {
         name: this.videoName ? this.videoName : "nameless video",
       });
     },
-    playlistReorder(item) {
-      if (item.moved.oldIndex == this.currentIndex) {
-        this.$store.commit("setIndex", item.moved.newIndex);
-      } else if (item.moved.newIndex == this.currentIndex) {
-        this.$store.commit("setIndex", item.moved.oldIndex);
-      }
+    playlistReorder() {
+      this.$store.commit(
+        "setIndex",
+        this.playlist.findIndex((el) => el.idIndex == this.currentVideo.idIndex)
+      );
       socket.emit("track:switch", {
         playlistData: this.$store.getters.playlistData,
       });
@@ -136,12 +138,6 @@ export default {
       socket.emit("track:remove", {
         index,
       });
-      // this.$store.commit(
-      //   "setStatePlaylist",
-      //   this.$store.getters.getPlaylist
-      //     .slice(0, index)
-      //     .concat(this.$store.getters.getPlaylist.slice(index + 1))
-      // );
     },
     addToCatalog(video) {
       let lib = this.library;
@@ -208,10 +204,7 @@ export default {
   padding: 2px;
   position: relative;
   text-align: left;
-  // max-height: fit-content;
-  // max-height: calc(50vh - 30px);
-  height: 410px;
-  // max-width: 490px;
+  max-height: 410px;
   padding: 2px 4px 15px 4px;
   overflow-y: scroll;
   overflow-x: hidden;

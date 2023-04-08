@@ -14,51 +14,53 @@
     </span>
     <div class="librarycontainer">
       <div
-        class="library playlist-row"
+        class="library"
         v-for="(catalog, index) in library"
         :key="index"
         @click="activeCatalog = index"
       >
-        <span
-          class="playlist-name playlist-element"
-          :style="index == activeCatalog ? 'font-weight:bold' : ''"
-          @click="openCloseCatalog(index)"
-          >{{ editingIndex === index ? "" : catalog.name }}
-          <input
-            id="editingNameLibrary"
-            v-if="editingIndex === index"
-            class="edit-name"
-            v-model="editedName"
-            @keyup.enter="saveEditedCatalogName(index)"
-            @blur="cancelEditingCatalogName"
-        /></span>
-        <span>
-          <input
-            type="button"
-            @click="editCatalogName(index)"
-            value=".."
-            class="playlist-button"
-          />
-          <input
-            type="button"
-            @click="playAll(index)"
-            value="Play All"
-            class="playlist-button"
-          />
-          <input
-            type="button"
-            @click="removePlaylist(index)"
-            value="-"
-            class="playlist-button"
-          />
-        </span>
+        <div class="catalog-row">
+          <span
+            class="playlist-name playlist-element"
+            :style="index == activeCatalog ? 'font-weight:bold' : ''"
+            @click="openCloseCatalog(index)"
+            >{{ editingIndex === index ? "" : catalog.name }}
+            <input
+              id="editingNameLibrary"
+              v-if="editingIndex === index"
+              class="edit-name"
+              v-model="editedName"
+              @keyup.enter="saveEditedCatalogName(index)"
+              @blur="cancelEditingCatalogName"
+          /></span>
+          <span class="playlist-buttons">
+            <input
+              type="button"
+              @click="editCatalogName(index)"
+              value=".."
+              class="playlist-button"
+            />
+            <input
+              type="button"
+              @click="playAll(index)"
+              value="Play All"
+              class="playlist-button"
+            />
+            <input
+              type="button"
+              @click="removePlaylist(index)"
+              value="-"
+              class="playlist-button"
+            />
+          </span>
+        </div>
         <div
           class="playlist-row"
           v-if="openedCatalogs.includes(index)"
           v-for="(video, index2) in catalog.playlist"
           :key="index2"
         >
-          <span @click="editVideoName(index, index2)" class="playlist-element"
+          <span @click="addToPlaylist(video)" class="playlist-element"
             >{{
               editingVideoIndex == index && editingVideoIndex2 == index2
                 ? ""
@@ -75,8 +77,8 @@
           <span class="playlist-buttons">
             <input
               type="button"
-              @click="addToPlaylist(video)"
-              value="+"
+              @click="editVideoName(index, index2)"
+              value=".."
               class="playlist-button"
             />
             <input
@@ -250,7 +252,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .library-wrapper {
-  padding-left: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(26, 33, 41);
+
   // max-width: 630px;
 
   .librarycontainer {
@@ -260,30 +265,45 @@ export default {
     overflow-y: scroll;
     .library {
       background-color: rgb(17, 26, 29);
-      text-align: left;
+      text-align: center;
       border-radius: 3px;
       border: 1px dotted rgb(168, 167, 230);
-      margin-bottom: -2px;
-
+      // margin-bottom: -2px;
       .edit-name {
         width: 300px;
         text-align: left;
       }
 
-      .playlist-name {
-        padding: 4px;
-        background-color: rgb(40, 54, 66);
-        border-radius: 5px;
-        margin-right: 2px;
+      .catalog-row {
+        text-align: left;
+        display: flex;
+
+        .playlist-name {
+          padding: 4px;
+          background-color: rgb(40, 54, 66);
+          margin-right: 2px;
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .playlist-buttons {
+          white-space: nowrap;
+          display: inline-block;
+        }
       }
+
       .playlist-button {
         padding: 3px 6px;
       }
       .playlist-row {
         display: flex;
+        text-align: left;
         align-items: center;
         font-size: small;
         padding-left: 5px;
+        // background-color: rgb(40, 54, 66);
         border-bottom: 1px solid rgb(43, 61, 79);
 
         .playlist-element {
@@ -292,11 +312,6 @@ export default {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-        }
-
-        .playlist-buttons {
-          white-space: nowrap;
-          display: inline-block;
         }
       }
     }
