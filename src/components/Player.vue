@@ -34,6 +34,8 @@
         @change="volumeChange"
       />
     </div>
+    {{ currentVideo }}
+    {{ recentTrackChange }}
   </div>
 </template>
 <script>
@@ -45,7 +47,8 @@ export default {
   components: { YouTube },
   data() {
     return {
-      currentClip: "",
+      currentClip: {},
+      // currentVideo: {},
       hostVolume: 50,
       shared: false,
       currentTime: 0,
@@ -58,6 +61,14 @@ export default {
   computed: {
     currentClipLink() {
       return this.$store.getters.currentClipLink;
+    },
+    currentVideo: {
+      get() {
+        return this.$store.getters.getCurrentVideo;
+      },
+      set(video) {
+        this.$store.commit("setCurrentVideo", video);
+      },
     },
     roomid() {
       return this.$route.params.roomid;
@@ -124,16 +135,16 @@ export default {
       socket.on("room", (data) => {
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
-        // this.$store.commit("setCurrentVideo", data.currentVideo);
+        this.$store.commit("setCurrentVideo", data.currentVideo);
         // this.currentClip = data.currentVideo;
       });
       socket.on("track:switch", async (data) => {
         this.recentTrackChange = setTimeout(() => {
           this.recentTrackChange = null;
-        }, 1000);
-        await this.$store.commit("setStatePlaylist", data.playlist);
-        await this.$store.commit("setIndex", data.currentIndex);
-        await this.$store.commit("setCurrentVideo", data.currentVideo);
+        }, 2000);
+        this.$store.commit("setStatePlaylist", data.playlist);
+        this.$store.commit("setIndex", data.currentIndex);
+        this.$store.commit("setCurrentVideo", data.currentVideo);
         if (data.currentVideo) this.currentClip = data.currentVideo;
         // if (this.currentClip) {
         // setTimeout(() => {
@@ -175,8 +186,8 @@ export default {
             socket.emit("track:switch", {
               playlistData: this.$store.getters.playlistData,
             });
+            // socket.emit("track:change", this.currentVideo);
           }
-          // this.currentClip = this.currentClipLink;
 
           break;
         case 1: //song playing

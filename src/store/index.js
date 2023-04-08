@@ -10,6 +10,7 @@ export default createStore({
     currentVideo: {
       name: "Muppets",
       link: "https://www.youtube.com/embed/tgbNymZ7vqY",
+      idIndex: 0,
     },
     currentTime: 0,
     activeCatalog: 0,
@@ -20,6 +21,9 @@ export default createStore({
         playlist: state.playlist,
         currentIndex: state.currentIndex,
       };
+    },
+    getCurrentVideo(state) {
+      return state.currentVideo;
     },
     currentClipLink(state) {
       return state.playlist[state.currentIndex].link;
@@ -53,6 +57,11 @@ export default createStore({
     },
     incrementCurrentIndex(state) {
       state.currentIndex++;
+    },
+    setCurrentVideo(state, video) {
+      state.currentVideo.name = video.name;
+      state.currentVideo.link = video.link;
+      state.currentVideo.idIndex = video.idIndex;
     },
     setPlaylistData(state, playlistData) {
       state.playlist = playlistData.playlist;

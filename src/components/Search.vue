@@ -163,27 +163,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-container {
-  //display: flex;
-  // align-items: center;
   margin-top: 12px;
   position: relative;
-  // width: 600px;
-
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(26, 33, 41);
   .foundvideos {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
     overflow-y: scroll;
-
-    //margin-left: 25%;
+    overflow-x: hidden;
+    max-height: 650px;
 
     .playlist-row {
       list-style: none;
       background-color: rgb(17, 26, 29);
       display: flex;
-      float: right;
       align-items: center;
-      width: 650px;
 
       .playlist-element {
         flex: 1;

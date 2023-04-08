@@ -25,11 +25,9 @@
           <span
             :style="index == currentIndex ? 'font-weight:bold' : ''"
             class="playlist-element"
-            @click="editVideoName(index)"
-            @touchstart="editVideoName(index)"
-            >{{
-              editingIndex === index ? "" : `${element.idIndex}${element.name}`
-            }}
+            @click="setCurrent(index)"
+            @touchstart="setCurrent(index)"
+            >{{ editingIndex === index ? "" : `${element.name}` }}
             <input
               id="editingPlaylist"
               v-if="editingIndex === index"
@@ -42,9 +40,9 @@
             <input
               class="playlist-button"
               type="button"
-              @click="setCurrent(index)"
-              @touchstart="setCurrent(index)"
-              value=">"
+              @click="editVideoName(index)"
+              @touchstart="editVideoName(index)"
+              value=".."
             />
             <input
               class="playlist-button"
@@ -180,15 +178,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .playlistcomponent {
-  // position: absolute;
-  // right: 0;
-  // top: 0;
-  // max-width: 500px;
-  // max-height: 50vh;
   border-radius: 7px;
   margin: 15px;
   padding-bottom: 20px;
-
   background-color: rgb(26, 33, 41);
   overflow: hidden;
 
@@ -208,10 +200,7 @@ export default {
   padding: 2px;
   position: relative;
   text-align: left;
-  // max-height: fit-content;
-  // max-height: calc(50vh - 30px);
-  height: 410px;
-  // max-width: 490px;
+  max-height: 410px;
   padding: 2px 4px 15px 4px;
   overflow-y: scroll;
   overflow-x: hidden;
