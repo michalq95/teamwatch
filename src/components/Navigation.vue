@@ -33,6 +33,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
+import axios from "axios";
 
 export default {
   name: "Navigation",
@@ -50,6 +51,16 @@ export default {
       return this.$store.getters.getUser;
     },
   },
+  async mounted() {
+    let uri = `${process.env.VUE_APP_BACKEND_URL}`;
+    try {
+      const res = await fetch(uri, {
+        method: "GET",
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  },
   methods: {
     ...mapMutations(["logOut"]),
     navigateToRoom() {
@@ -58,18 +69,23 @@ export default {
     async loginMe() {
       if (this.loginData.password && this.loginData.name) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/login`;
+        // console.log(uri);
         try {
           const res = await fetch(uri, {
             method: "POST",
             mode: "cors",
             headers: {
+              Accept: "application/json, text/plain, */*",
               "Content-Type": "application/json",
             },
             body: JSON.stringify(this.loginData),
           });
 
           const data = await res.json();
-          if (data.success) {
+          // const res = await axios.post(uri, this.loginData);
+          // console.log(res);
+          // const data = res.data;
+          if (data) {
             let jsonstring = JSON.stringify({
               name: data.user.name,
               token: data.token,

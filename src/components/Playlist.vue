@@ -27,9 +27,7 @@
             class="playlist-element"
             @click="setCurrent(index)"
             @touchstart="setCurrent(index)"
-            >{{
-              editingIndex === index ? "" : `${element.idIndex}${element.name}`
-            }}
+            >{{ editingIndex === index ? "" : `${element.name}` }}
             <input
               id="editingPlaylist"
               v-if="editingIndex === index"
@@ -176,15 +174,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .playlistcomponent {
-  // position: absolute;
-  // right: 0;
-  // top: 0;
-  // max-width: 500px;
-  // max-height: 50vh;
   border-radius: 7px;
   margin: 15px;
   padding-bottom: 20px;
-
   background-color: rgb(26, 33, 41);
   overflow: hidden;
 
