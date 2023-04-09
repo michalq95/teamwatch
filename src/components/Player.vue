@@ -34,7 +34,6 @@
         @change="volumeChange"
       />
     </div>
-    {{ tooSoon }}
   </div>
 </template>
 <script>
@@ -170,8 +169,6 @@ export default {
             socket.emit("track:next", {
               currentIdIndex: this.currentClip.idIndex,
             });
-          } else {
-            console.log("too soon");
           }
           // await this.$store.commit("incrementCurrentIndex");
           // socket.emit("track:switch", {
