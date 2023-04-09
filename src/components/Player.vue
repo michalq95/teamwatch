@@ -34,6 +34,7 @@
         @change="volumeChange"
       />
     </div>
+    {{ tooSoon }}
   </div>
 </template>
 <script>
@@ -52,6 +53,7 @@ export default {
       maxTime: 0,
       updateInterval: null,
       paused: false,
+      tooSoon: null,
     };
   },
   computed: {
@@ -123,6 +125,9 @@ export default {
         // this.currentClip = data.currentVideo;
       });
       socket.on("track:switch", async (data) => {
+        this.tooSoon = setTimeout(() => {
+          this.tooSoon = undefined;
+        }, 2000);
         await this.$store.commit("setStatePlaylist", data.playlist);
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
@@ -161,11 +166,13 @@ export default {
       // console.log(value.data);
       switch (value.data) {
         case 0: //song ended
-          console.log(this.currentClip);
-          console.log(this.currentClip.idIndex);
-          socket.emit("track:next", {
-            currentIdIndex: this.currentClip.idIndex,
-          });
+          if (!this.tooSoon) {
+            socket.emit("track:next", {
+              currentIdIndex: this.currentClip.idIndex,
+            });
+          } else {
+            console.log("too soon");
+          }
           // await this.$store.commit("incrementCurrentIndex");
           // socket.emit("track:switch", {
           // playlistData: this.$store.getters.playlistData,
