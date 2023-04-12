@@ -7,6 +7,10 @@
     Username:
     <input class="textinput" type="text" v-model="username" />
   </div>
+  <div>
+    Room Password:
+    <input class="textinput" type="text" v-model="password" />
+  </div>
   <input
     class="button"
     type="button"
@@ -15,28 +19,52 @@
   />
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       roomName: "room",
       registerData: {},
       username: "Anonymous",
+      password: "aaa",
     };
   },
   methods: {
-    navigateToRoom() {
-      if (this.isLoggedIn) {
-        this.$router.push({ name: "room", params: { roomid: this.roomName } });
-      } else {
-        this.$store.commit("setUser", {
-          name: this.username || "Anonymous",
-          token: null,
+    async navigateToRoom() {
+      let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/room`;
+      try {
+        console.log(uri);
+
+        const res = await axios.post(uri, {
+          room: this.roomName,
+          password: this.password,
         });
-        this.$router.push({
-          name: "room",
-          params: { roomid: this.roomName },
-        });
+        console.log(res);
+        if (res.status === 200) {
+          this.$store.commit("setRoomPassword", this.password);
+          if (this.isLoggedIn) {
+            this.$router.push({
+              name: "room",
+              params: { roomid: this.roomName },
+            });
+          } else {
+            this.$store.commit("setUser", {
+              name: this.username || "Anonymous",
+              token: null,
+            });
+            this.$router.push({
+              name: "room",
+              params: { roomid: this.roomName },
+            });
+          }
+        } else {
+          console.log("wrong password to the room");
+        }
+      } catch (e) {
+        console.error(e);
       }
+      console.log("aa");
     },
   },
   computed: {

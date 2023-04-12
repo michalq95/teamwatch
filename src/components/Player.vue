@@ -65,6 +65,9 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    roomPassword() {
+      return this.$store.getters.getRoomPassword;
+    },
   },
 
   beforeUnmount() {
@@ -95,12 +98,11 @@ export default {
       } catch (e) {}
     },
     onReady() {
-      // this.currentClip = this.currentClipLink;
-      // this.currentClip = data.currentVideo;
       socket.auth = {
         room: this.roomid,
         token: this.user.token,
         name: this.user.name,
+        password: this.roomPassword,
       };
       socket.connect();
       socket.on("newuserconnected", ({ username }) => {
@@ -120,8 +122,6 @@ export default {
         console.log(data);
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
-        // this.$store.commit("setCurrentVideo", data.currentVideo);
-        // this.currentClip = data.currentVideo;
       });
       socket.on("track:switch", async (data) => {
         this.tooSoon = setTimeout(() => {
@@ -131,20 +131,6 @@ export default {
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
         if (data.currentVideo) this.currentClip = data.currentVideo;
-        // if (this.currentClip) {
-        // setTimeout(() => {
-        //   let playerstate = this.$refs.youtube.getPlayerState();
-        //   if (playerstate != 1) {
-        //     this.$refs.youtube.playVideo();
-        //     // setTimeout(() => {
-        //     //   if (this.$refs.youtube.getPlayerState() != 1) {
-        //     //     console.log("playing video once more, wy it has to be like this");
-        //     //     this.$refs.youtube.playVideo();
-        //     //   }
-        //     // }, 1500);
-        //   }
-        // }, 2000);
-        // }
       });
       socket.on("track:seek", ({ seekToTime }) => {
         if (this.shared) this.$refs.youtube.seekTo(seekToTime);
@@ -153,9 +139,7 @@ export default {
         this.hostVolume = volume;
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
-      socket.on("blocked", () => {
-        // console.log("blocked");
-      });
+      socket.on("blocked", () => {});
       this.$refs.youtube.playVideo();
       this.updateInterval = setInterval(() => {
         this.currentTime = this.$refs.youtube.getCurrentTime();

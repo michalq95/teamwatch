@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     name: String,
+    roomPassword: null,
     user: { name: null, token: null },
     library: [],
     playlist: [],
@@ -48,6 +49,9 @@ export default createStore({
     getCurrentVideo(state) {
       return state.currentVideo;
     },
+    getRoomPassword(state) {
+      return state.roomPassword;
+    },
   },
   mutations: {
     setUser(state, user) {
@@ -80,6 +84,9 @@ export default createStore({
     },
     setActiveCatalog(state, catalog) {
       state.activeCatalog = catalog;
+    },
+    setRoomPassword(state, password) {
+      state.roomPassword = password;
     },
   },
   actions: {},
