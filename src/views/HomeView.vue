@@ -36,10 +36,18 @@ export default {
       try {
         console.log(uri);
 
-        const res = await axios.post(uri, {
-          room: this.roomName,
-          password: this.password,
-        });
+        const res = await axios.post(
+          uri,
+          {
+            room: this.roomName,
+            password: this.password,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
         console.log(res);
         if (res.status === 200) {
           this.$store.commit("setRoomPassword", this.password);
