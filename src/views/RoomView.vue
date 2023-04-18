@@ -6,6 +6,7 @@
       <Library class="comp3 comp"></Library>
     </div>
     <Search class="comp4 comp"></Search>
+    <Chat></Chat>
   </div>
 </template>
 
@@ -14,10 +15,17 @@ import Playlist from "../components/Playlist.vue";
 import Player from "../components/Player.vue";
 import Library from "../components/Library.vue";
 import Search from "../components/Search.vue";
+import Chat from "../components/Chat.vue";
 
 export default {
   name: "RoomView",
-  components: { Player, Playlist, Library, Search },
+  components: {
+    Player,
+    Playlist,
+    Library,
+    Search,
+    Chat,
+  },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;

@@ -1,10 +1,11 @@
 import { createStore } from "vuex";
+import router from "../router";
 
 export default createStore({
   state: {
     name: String,
     roomPassword: null,
-    user: { name: null, token: null },
+    user: { name: null, token: null, id: null },
     library: [],
     playlist: [],
     currentIndex: 0,
@@ -57,6 +58,7 @@ export default createStore({
     setUser(state, user) {
       state.user.name = user.name;
       state.user.token = user.token;
+      state.user.id = user.id;
     },
     incrementCurrentIndex(state) {
       state.currentIndex++;
@@ -78,6 +80,7 @@ export default createStore({
       state.user = { name: null, token: null };
       state.library = [];
       localStorage.clear();
+      router.push({ name: "home" });
     },
     setLibrary(state, library) {
       state.library = library;

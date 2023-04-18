@@ -17,6 +17,12 @@
     value="Join the Room"
     @click="navigateToRoom"
   />
+  <div v-if="errorRoomPassword" style="color: crimson">
+    Room already exists and you provided wrong password
+  </div>
+  <div v-if="errorRoomName && !roomName" style="color: crimson">
+    Please provide room name
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -28,51 +34,58 @@ export default {
       registerData: {},
       username: "Anonymous",
       password: "aaa",
+      errorRoomPassword: null,
+      errorRoomName: null,
     };
   },
   methods: {
     async navigateToRoom() {
-      let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/room`;
-      try {
-        console.log(uri);
-
-        const res = await axios.post(
-          uri,
-          {
-            room: this.roomName,
-            password: this.password,
-          },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
+      if (this.roomName) {
+        let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/room`;
+        try {
+          const res = await axios.post(
+            uri,
+            {
+              room: this.roomName,
+              password: this.password,
             },
-          }
-        );
-        console.log(res);
-        if (res.status === 200) {
-          this.$store.commit("setRoomPassword", this.password);
-          if (this.isLoggedIn) {
-            this.$router.push({
-              name: "room",
-              params: { roomid: this.roomName },
-            });
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          );
+          if (res.status === 200) {
+            this.$store.commit("setRoomPassword", this.password);
+            if (this.isLoggedIn) {
+              this.$router.push({
+                name: "room",
+                params: { roomid: this.roomName },
+              });
+            } else {
+              this.$store.commit("setUser", {
+                name: this.username || "Anonymous",
+                token: null,
+                id: null,
+              });
+              this.$router.push({
+                name: "room",
+                params: { roomid: this.roomName },
+              });
+            }
           } else {
-            this.$store.commit("setUser", {
-              name: this.username || "Anonymous",
-              token: null,
-            });
-            this.$router.push({
-              name: "room",
-              params: { roomid: this.roomName },
-            });
+            this.errorRoomPassword = setTimeout(() => {
+              this.errorRoomPassword = null;
+            }, 10000);
           }
-        } else {
-          console.log("wrong password to the room");
+        } catch (e) {
+          console.error(e);
         }
-      } catch (e) {
-        console.error(e);
+      } else {
+        this.errorRoomName = setTimeout(() => {
+          this.errorRoomName = null;
+        }, 10000);
       }
-      console.log("aa");
     },
   },
   computed: {

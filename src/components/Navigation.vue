@@ -6,6 +6,9 @@
       </div>
       <div class="nav-links">
         <form @submit.prevent="login" v-if="!isLoggedIn">
+          <div v-if="errorLogin" style="color: crimson">
+            Wrong username or password
+          </div>
           <input
             class="login logininput"
             v-model="loginData.name"
@@ -40,7 +43,7 @@ export default {
   data() {
     return {
       loginData: {},
-      unsuccesful: false,
+      errorLogin: null,
     };
   },
   computed: {
@@ -80,26 +83,31 @@ export default {
             },
             body: JSON.stringify(this.loginData),
           });
+          if (res.status == 200) {
+            const data = await res.json();
+            if (data) {
+              const currentUser = {
+                name: data.user.name,
+                token: data.token,
+                id: data.user.id,
+              };
+              console.log(currentUser);
+              let jsonstring = JSON.stringify(currentUser);
+              localStorage.setItem("user", jsonstring);
 
-          const data = await res.json();
-          // const res = await axios.post(uri, this.loginData);
-          // console.log(res);
-          // const data = res.data;
-          if (data) {
-            let jsonstring = JSON.stringify({
-              name: data.user.name,
-              token: data.token,
-            });
-            localStorage.setItem("user", jsonstring);
-
-            this.$store.commit("setUser", {
-              name: data.user.name,
-              token: data.token,
-            });
-            this.$store.commit("setLibrary", data.user.playlists);
+              this.$store.commit("setUser", currentUser);
+              this.$store.commit("setLibrary", data.user.playlists);
+              this.$router.push({ name: "home" });
+            }
+          } else {
+            this.errorLogin = setTimeout(() => {
+              this.errorLogin = null;
+            }, 10000);
           }
         } catch (e) {
-          this.unsuccesful = true;
+          this.errorLogin = setTimeout(() => {
+            this.errorLogin = null;
+          }, 10000);
           console.error(e);
         }
       }

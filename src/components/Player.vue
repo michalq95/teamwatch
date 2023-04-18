@@ -98,15 +98,32 @@ export default {
       } catch (e) {}
     },
     onReady() {
+      // console.log(this.user);
+      let sessionID;
+      if (this.user.id) {
+        sessionID = this.user.id;
+      } else {
+        const storageSessionID = localStorage.getItem("sessionID");
+        if (storageSessionID) {
+          sessionID = storageSessionID;
+        }
+      }
+
       socket.auth = {
         room: this.roomid,
         token: this.user.token,
         name: this.user.name,
         password: this.roomPassword,
+        sessionID,
       };
+      console.log(socket.auth);
       socket.connect();
+      socket.on("session", ({ sessionID }) => {
+        socket.auth = { ...socket.auth, sessionID };
+        localStorage.setItem("sessionID", sessionID);
+      });
       socket.on("newuserconnected", ({ username }) => {
-        console.log(`user ${username} connected to room ${this.roomid}`);
+        // console.log(`user ${username} connected to room ${this.roomid}`);
       });
       socket.on("track:play", () => {
         this.$refs.youtube.playVideo();
@@ -154,29 +171,15 @@ export default {
               currentIdIndex: this.currentClip.idIndex,
             });
           }
-          // await this.$store.commit("incrementCurrentIndex");
-          // socket.emit("track:switch", {
-          // playlistData: this.$store.getters.playlistData,
-          // });
-          // }
-          // this.currentClip = this.currentClipLink;
-
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          // if (this.paused) socket.emit("track:play");
           this.paused = false;
           break;
         case 2: //song paused
-          // if (!this.paused) socket.emit("track:pause");
           this.paused = true;
           break;
         case 3: //song buffering
-          break;
-        case 5: //song seek
-          // console.log("emit current position");
-          //dupa nie dziala, to nie to
-          // socket.emit("track:cue");
           break;
       }
     },

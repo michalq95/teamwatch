@@ -168,17 +168,6 @@ export default {
     async saveLibrary() {
       let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/library`;
       try {
-        // const res = await fetch(uri, {
-        //   method: "POST",
-        //   mode: "cors",
-        //   headers: {
-        //     Accept: "application/json, text/plain, */*",
-        //     "Content-Type": "application/json",
-        //     authorization: `Bearer ${this.user.token}`,
-        //   },
-        //   body: JSON.stringify(this.library),
-        // });
-        // const data = await res.json();
         const res = await axios.post(uri, this.library, {
           headers: {
             Authorization: `Bearer ${this.user.token}`,
