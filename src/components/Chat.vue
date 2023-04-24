@@ -8,9 +8,7 @@ export default {
     return {};
   },
   mounted() {
-    socket.on("users", (users) => {
-      console.log(users);
-    });
+    socket.on("users", (users) => {});
   },
 };
 </script>
