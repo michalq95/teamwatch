@@ -116,7 +116,6 @@ export default {
         password: this.roomPassword,
         sessionID,
       };
-      console.log(socket.auth);
       socket.connect();
       socket.on("session", ({ sessionID }) => {
         socket.auth = { ...socket.auth, sessionID };
@@ -136,7 +135,6 @@ export default {
         this.paused = true;
       });
       socket.on("room", (data) => {
-        console.log(data);
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
       });

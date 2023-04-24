@@ -91,7 +91,6 @@ export default {
                 token: data.token,
                 id: data.user.id,
               };
-              console.log(currentUser);
               let jsonstring = JSON.stringify(currentUser);
               localStorage.setItem("user", jsonstring);
 
