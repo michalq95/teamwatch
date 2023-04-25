@@ -40,6 +40,7 @@
 // import { defineComponent } from "vue";
 import YouTube from "vue3-youtube";
 import socket from "../socket";
+import axios from "axios";
 
 export default {
   components: { YouTube },
@@ -57,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    this.healthinterval = this.setInterval(async () => {
+    this.healthinterval = setInterval(async () => {
       let res = await axios.get(process.env.VUE_APP_BACKEND_URL);
       console.log(res);
     }, 1000 * 60 * 10);
