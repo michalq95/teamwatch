@@ -56,6 +56,14 @@ export default {
     };
   },
   computed: {
+    playlist: {
+      get() {
+        return this.$store.getters.getPlaylist;
+      },
+      set(value) {
+        this.$store.commit("setStatePlaylist", value);
+      },
+    },
     currentClipLink() {
       return this.$store.getters.currentClipLink;
     },
@@ -137,6 +145,14 @@ export default {
       socket.on("room", (data) => {
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
+      });
+      socket.on("room:init", (data) => {
+        if (!this.playlist.length) {
+          this.$store.commit("setStatePlaylist", data.playlist);
+          this.$store.commit("setIndex", data.currentIndex);
+          this.$store.commit("setCurrentVideo", data.currentVideo);
+          if (data.currentVideo) this.currentClip = data.currentVideo;
+        }
       });
       socket.on("track:switch", async (data) => {
         this.tooSoon = setTimeout(() => {

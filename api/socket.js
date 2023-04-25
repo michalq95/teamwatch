@@ -13,7 +13,7 @@ io.on("connection", async (socket) => {
   console.log(`A user connected to room ${socket.room}`);
   socket.join(socket.room);
   const createdRoom = createOrJoinRoom(socket.room);
-  socket.emit("track:switch", createdRoom);
+  socket.emit("room", createdRoom);
   socket.to(socket.room).emit("newuserconnected", {
     username: socket.username,
   });
