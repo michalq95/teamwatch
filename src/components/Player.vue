@@ -53,7 +53,14 @@ export default {
       updateInterval: null,
       paused: false,
       tooSoon: null,
+      healthinterval: null,
     };
+  },
+  mounted() {
+    this.healthinterval = this.setInterval(async () => {
+      let res = await axios.get(process.env.VUE_APP_BACKEND_URL);
+      console.log(res);
+    }, 1000 * 60 * 10);
   },
   computed: {
     playlist: {
@@ -81,6 +88,7 @@ export default {
   beforeUnmount() {
     try {
       clearInterval(this.updateInterval);
+      clearInterval(this.healthInterval);
       socket.disconnect();
     } catch (e) {
       console.error(e);
