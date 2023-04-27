@@ -34,6 +34,7 @@
 <script>
 import { mapMutations } from "vuex";
 import axios from "axios";
+import socket from "../socket";
 
 export default {
   name: "Navigation",
@@ -52,6 +53,9 @@ export default {
     },
   },
   async mounted() {
+    socket.on("forcelogout", () => {
+      this.logOut();
+    });
     let uri = `${process.env.VUE_APP_BACKEND_URL}`;
     try {
       const res = await fetch(uri, {
