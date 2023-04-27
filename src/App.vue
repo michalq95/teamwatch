@@ -50,6 +50,26 @@ body {
     border-radius: 5px;
     border-color: #2c3e50;
   }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
 
 nav {

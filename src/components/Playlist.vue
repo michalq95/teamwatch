@@ -128,7 +128,7 @@ export default {
         "setIndex",
         this.playlist.findIndex((el) => el.idIndex == this.currentVideo.idIndex)
       );
-      socket.emit("track:switch", {
+      socket.emit("room", {
         playlistData: this.$store.getters.playlistData,
       });
     },

@@ -21,6 +21,15 @@
       />
       <button class="login" @click="registerMe" type="submit">Register</button>
     </form>
+    <div v-if="errorData" style="color: crimson">
+      Please provide name, email and password
+    </div>
+    <div v-if="errorName" style="color: crimson">
+      User with this name is already registered
+    </div>
+    <div v-if="errorEmail" style="color: crimson">
+      User with this email is already registered
+    </div>
   </div>
   <div v-else>
     <router-link class="header" to="/"
@@ -37,6 +46,9 @@ export default {
     return {
       roomName: "room",
       registerData: {},
+      errorData: null,
+      errorName: null,
+      errorEmail: null,
     };
   },
   computed: {
@@ -53,37 +65,40 @@ export default {
       ) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/register`;
         try {
-          // const res = await fetch(uri, {
-          //   method: "POST",
-          //   mode: "cors",
-          //   headers: {
-          //     // Accept: "application/json, text/plain, */*",
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(this.registerData),
-          // });
-
-          // const data = await res.json();
-          const res = await axios.post(uri, this.loginData);
+          const res = await axios.post(uri, this.registerData, {
+            withCredentials: true,
+          });
           const data = res.data;
-          if (data.success) {
-            let jsonstring = JSON.stringify({
-              name: data.user.name,
-              token: data.token,
-            });
-            localStorage.setItem("user", jsonstring);
-            // localStorage.setItem("token", data.token);
-
-            this.$store.commit("setUser", {
-              name: data.user.name,
-              token: data.token,
-            });
-            this.$router.push({ name: "home" });
-          }
+          let jsonstring = JSON.stringify({
+            name: data.user.name,
+            token: data.token,
+          });
+          localStorage.setItem("user", jsonstring);
+          this.$store.commit("setUser", {
+            name: data.user.name,
+            token: data.token,
+            id: data.user.id,
+          });
+          this.$router.push({ name: "home" });
         } catch (e) {
-          this.unsuccesful = true;
-          console.error(e);
+          if (e.response.status == 401) {
+            this.errorName = setTimeout(() => {
+              this.errorName = null;
+            }, 10000);
+          } else if (e.response.status == 403) {
+            this.errorEmail = setTimeout(() => {
+              this.errorEmail = null;
+            }, 10000);
+          } else {
+            this.errorData = setTimeout(() => {
+              this.errorData = null;
+            }, 10000);
+          }
         }
+      } else {
+        this.errorData = setTimeout(() => {
+          this.errorData = null;
+        }, 10000);
       }
     },
   },

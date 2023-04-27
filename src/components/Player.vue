@@ -40,6 +40,7 @@
 // import { defineComponent } from "vue";
 import YouTube from "vue3-youtube";
 import socket from "../socket";
+import axios from "axios";
 
 export default {
   components: { YouTube },
@@ -52,10 +53,25 @@ export default {
       maxTime: 0,
       updateInterval: null,
       paused: false,
-      recentTrackChange: null,
+      tooSoon: null,
+      healthinterval: null,
     };
   },
+  mounted() {
+    this.healthinterval = setInterval(async () => {
+      let res = await axios.get(process.env.VUE_APP_BACKEND_URL);
+      console.log(res);
+    }, 1000 * 60 * 10);
+  },
   computed: {
+    playlist: {
+      get() {
+        return this.$store.getters.getPlaylist;
+      },
+      set(value) {
+        this.$store.commit("setStatePlaylist", value);
+      },
+    },
     currentClipLink() {
       return this.$store.getters.currentClipLink;
     },
@@ -65,11 +81,15 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    roomPassword() {
+      return this.$store.getters.getRoomPassword;
+    },
   },
 
   beforeUnmount() {
     try {
       clearInterval(this.updateInterval);
+      clearInterval(this.healthInterval);
       socket.disconnect();
     } catch (e) {
       console.error(e);
@@ -95,16 +115,31 @@ export default {
       } catch (e) {}
     },
     onReady() {
-      // this.currentClip = this.currentClipLink;
-      // this.currentClip = data.currentVideo;
+      // console.log(this.user);
+      let sessionID;
+      if (this.user.id) {
+        sessionID = this.user.id;
+      } else {
+        const storageSessionID = localStorage.getItem("sessionID");
+        if (storageSessionID) {
+          sessionID = storageSessionID;
+        }
+      }
+
       socket.auth = {
         room: this.roomid,
         token: this.user.token,
         name: this.user.name,
+        password: this.roomPassword,
+        sessionID,
       };
       socket.connect();
+      socket.on("session", ({ sessionID }) => {
+        socket.auth = { ...socket.auth, sessionID };
+        localStorage.setItem("sessionID", sessionID);
+      });
       socket.on("newuserconnected", ({ username }) => {
-        console.log(`user ${username} connected to room ${this.roomid}`);
+        // console.log(`user ${username} connected to room ${this.roomid}`);
       });
       socket.on("track:play", () => {
         this.$refs.youtube.playVideo();
@@ -119,31 +154,23 @@ export default {
       socket.on("room", (data) => {
         this.$store.commit("setStatePlaylist", data.playlist);
         this.$store.commit("setIndex", data.currentIndex);
-        // this.$store.commit("setCurrentVideo", data.currentVideo);
-        // this.currentClip = data.currentVideo;
+      });
+      socket.on("room:init", (data) => {
+        if (!this.playlist.length) {
+          this.$store.commit("setStatePlaylist", data.playlist);
+          this.$store.commit("setIndex", data.currentIndex);
+          this.$store.commit("setCurrentVideo", data.currentVideo);
+          if (data.currentVideo) this.currentClip = data.currentVideo;
+        }
       });
       socket.on("track:switch", async (data) => {
-        this.recentTrackChange = setTimeout(() => {
-          this.recentTrackChange = null;
-        }, 1000);
+        this.tooSoon = setTimeout(() => {
+          this.tooSoon = undefined;
+        }, 2000);
         await this.$store.commit("setStatePlaylist", data.playlist);
         await this.$store.commit("setIndex", data.currentIndex);
         await this.$store.commit("setCurrentVideo", data.currentVideo);
         if (data.currentVideo) this.currentClip = data.currentVideo;
-        // if (this.currentClip) {
-        // setTimeout(() => {
-        //   let playerstate = this.$refs.youtube.getPlayerState();
-        //   if (playerstate != 1) {
-        //     this.$refs.youtube.playVideo();
-        //     // setTimeout(() => {
-        //     //   if (this.$refs.youtube.getPlayerState() != 1) {
-        //     //     console.log("playing video once more, wy it has to be like this");
-        //     //     this.$refs.youtube.playVideo();
-        //     //   }
-        //     // }, 1500);
-        //   }
-        // }, 2000);
-        // }
       });
       socket.on("track:seek", ({ seekToTime }) => {
         if (this.shared) this.$refs.youtube.seekTo(seekToTime);
@@ -152,9 +179,7 @@ export default {
         this.hostVolume = volume;
         if (this.shared) this.$refs.youtube.setVolume(volume);
       });
-      socket.on("blocked", () => {
-        // console.log("blocked");
-      });
+      socket.on("blocked", () => {});
       this.$refs.youtube.playVideo();
       this.updateInterval = setInterval(() => {
         this.currentTime = this.$refs.youtube.getCurrentTime();
@@ -164,33 +189,20 @@ export default {
       // console.log(value.data);
       switch (value.data) {
         case 0: //song ended
-          if (!this.recentTrackChange) {
+          if (!this.tooSoon) {
             socket.emit("track:next", {
               currentIdIndex: this.currentClip.idIndex,
             });
-            // await this.$store.commit("incrementCurrentIndex");
-            // socket.emit("track:switch", {
-            // playlistData: this.$store.getters.playlistData,
-            // });
           }
-          // this.currentClip = this.currentClipLink;
-
           break;
         case 1: //song playing
           this.maxTime = this.$refs.youtube.getDuration();
-          // if (this.paused) socket.emit("track:play");
           this.paused = false;
           break;
         case 2: //song paused
-          // if (!this.paused) socket.emit("track:pause");
           this.paused = true;
           break;
         case 3: //song buffering
-          break;
-        case 5: //song seek
-          // console.log("emit current position");
-          //dupa nie dziala, to nie to
-          // socket.emit("track:cue");
           break;
       }
     },
