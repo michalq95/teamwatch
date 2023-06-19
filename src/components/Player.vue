@@ -223,6 +223,8 @@ export default {
 <style lang="scss" scoped>
 .player {
   width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .seek {
   width: 720px;

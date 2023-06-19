@@ -123,6 +123,7 @@ header {
   background-color: #12151b;
   padding: 0 25px;
   z-index: 99;
+  width: 100vw;
   .link {
     font-weight: 500;
     padding: 0 8px;
