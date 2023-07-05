@@ -68,7 +68,14 @@ export default {
       let match;
       match = this.searchPhrase.match(/list=([^&]*)/);
       if (match) {
-        socket.emit("playlist:get", { phrase: match[1] });
+        console.log(match);
+        let match2 = this.searchPhrase.match(/v=([a-zA-Z0-9_-]+)&?/);
+        if (match2) {
+          socket.emit("playlistvideo:get", {
+            phrase: match[1],
+            phrase2: match2[1],
+          });
+        } else socket.emit("playlist:get", { phrase: match[1] });
       } else {
         match = this.searchPhrase.match(/v=([a-zA-Z0-9_-]+)&?/);
         if (match) {
