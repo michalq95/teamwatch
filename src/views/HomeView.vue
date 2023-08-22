@@ -26,6 +26,7 @@
 </template>
 <script>
 import axios from "axios";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
@@ -39,6 +40,8 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["logOut"]),
+
     async navigateToRoom() {
       if (this.roomName) {
         let uri = `${process.env.VUE_APP_BACKEND_URL}api/user/room`;
@@ -80,6 +83,9 @@ export default {
           }
         } catch (e) {
           console.error(e);
+          if (e.response && e.response.status === 403) {
+            this.logOut();
+          }
         }
       } else {
         this.errorRoomName = setTimeout(() => {

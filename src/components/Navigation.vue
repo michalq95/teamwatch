@@ -57,6 +57,7 @@ export default {
   },
   async mounted() {
     socket.on("forcelogout", () => {
+      console.log("should logout");
       this.logOut();
     });
     let uri = `${process.env.VUE_APP_BACKEND_URL}`;

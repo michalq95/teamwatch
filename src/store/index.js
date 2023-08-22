@@ -77,7 +77,8 @@ export default createStore({
       state.currentVideo = index;
     },
     logOut(state) {
-      state.user = { name: null, token: null };
+      console.log("logging out");
+      state.user = { name: null, token: null, id: null };
       state.library = [];
       localStorage.clear();
       router.push({ name: "home" });
