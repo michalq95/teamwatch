@@ -1,15 +1,10 @@
 <template>
   <div class="playlistcomponent">
-    <div class="addvideo">
+    <div class="addvideo" v-if="isLoggedIn">
       <!-- <input type="text" v-model="videoRef" placeholder="link to video" />
       <input type="text" v-model="videoName" placeholder="video name" />
       <input type="button" @click="addTrack" value="+" /> -->
-      <input
-        v-if="isLoggedIn"
-        type="button"
-        value="saveAll"
-        @click="addEntireToLibrary"
-      />
+      <input type="button" value="saveAll" @click="addEntireToLibrary" />
     </div>
 
     <draggable
@@ -198,6 +193,7 @@ export default {
   text-align: left;
   max-height: 410px;
   padding: 2px 4px 15px 4px;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
 
