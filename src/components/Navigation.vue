@@ -122,7 +122,6 @@ export default {
 <style lang="scss" scoped>
 header {
   background-color: #12151b;
-  padding: 0 25px;
   z-index: 99;
   width: 100vw;
   .link {
@@ -143,6 +142,7 @@ header {
       display: flex;
       align-items: center;
       .header {
+        padding-left: 25px;
         font-weight: 600;
         font-size: 24px;
         color: rgb(168, 167, 230);
