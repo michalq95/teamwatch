@@ -130,7 +130,7 @@ export default {
         room: this.roomid,
         token: this.user.token,
         name: this.user.name,
-        password: this.roomPassword,
+        password: this.roomPassword || "",
         sessionID,
       };
       socket.connect();
