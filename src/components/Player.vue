@@ -129,7 +129,7 @@ export default {
       socket.auth = {
         room: this.roomid,
         token: this.user.token,
-        name: this.user.name,
+        name: this.user.name || "Anonymous",
         password: this.roomPassword || "",
         sessionID,
       };
